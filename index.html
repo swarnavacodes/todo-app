@@ -434,6 +434,42 @@
             filter: brightness(1.1);
         }
 
+        /* Approaching Tasks Section */
+        .approaching-tasks-container {
+            margin-top: 30px;
+        }
+
+        #approaching-tasks-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease-in-out;
+        }
+
+        #approaching-tasks-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        #approaching-tasks-list .task-text {
+            flex-grow: 1;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--font-color);
+        }
+
+        #approaching-tasks-list .due-date {
+            font-size: 13px;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+
         /* Custom Confirm Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -966,6 +1002,11 @@
                 <button id="show-more-all-tasks" class="show-more-btn">Show More</button>
                 <button id="clear-completed">Clear Completed</button>
             </div>
+            <div class="container approaching-tasks-container">
+                <h2>Approaching Deadlines</h2>
+                <ul id="approaching-tasks-list"></ul>
+                <button id="show-more-approaching-tasks" class="show-more-btn">Show More</button>
+            </div>
             </div>
         <div class="calendar-container">
             <div class="calendar-header">
@@ -1007,6 +1048,8 @@
             const priorityFilter = document.getElementById('priority-filter');
             const priorityInput = document.getElementById('priority-input');
             const showMoreAllTasksBtn = document.getElementById('show-more-all-tasks');
+            const approachingTasksList = document.getElementById('approaching-tasks-list');
+            const showMoreApproachingTasksBtn = document.getElementById('show-more-approaching-tasks');
 
             let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
             let currentFilter = 'all';
@@ -1016,6 +1059,7 @@
             let filterCategory = '';
             let priorityFilterValue = '';
             let allTasksExpanded = false;
+            let approachingTasksExpanded = false;
 
             // Modal elements
             const confirmModal = document.getElementById('custom-confirm');
@@ -1039,6 +1083,7 @@
                 localStorage.setItem('tasks', JSON.stringify(tasks));
                 renderCalendar();
                 showTasksForDay(selectedDate);
+                renderApproachingTasks();
             };
 
             // Update renderTasks to filter by priority
@@ -1325,6 +1370,45 @@
                 render();
             };
 
+            const renderApproachingTasks = () => {
+                approachingTasksList.innerHTML = '';
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const approachingTasks = tasks.filter(task => {
+                    if (task.completed || !task.dueDate) return false;
+                    const dueDate = new Date(task.dueDate);
+                    dueDate.setHours(0, 0, 0, 0);
+                    const diffTime = dueDate.getTime() - today.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 3; // Due today or within the next 3 days
+                }).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+                const tasksToRender = approachingTasksExpanded ? approachingTasks : approachingTasks.slice(0, 3);
+
+                if (tasksToRender.length === 0) {
+                    approachingTasksList.innerHTML = '<li>No tasks with approaching deadlines.</li>';
+                    showMoreApproachingTasksBtn.style.display = 'none';
+                    return;
+                }
+
+                tasksToRender.forEach(task => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="task-text">${task.text}</span>
+                        <span class="due-date">Due: ${new Date(task.dueDate).toLocaleDateString()}</span>
+                    `;
+                    approachingTasksList.appendChild(li);
+                });
+
+                if (approachingTasks.length > 3) {
+                    showMoreApproachingTasksBtn.style.display = 'block';
+                    showMoreApproachingTasksBtn.textContent = approachingTasksExpanded ? 'Show Less' : `Show ${approachingTasks.length - 3} More`;
+                } else {
+                    showMoreApproachingTasksBtn.style.display = 'none';
+                }
+            };
+
             const setDefaultDate = () => {
                 const today = new Date();
                 const yyyy = today.getFullYear();
@@ -1401,10 +1485,16 @@
                 renderTasks();
             });
 
+            showMoreApproachingTasksBtn.addEventListener('click', () => {
+                approachingTasksExpanded = !approachingTasksExpanded;
+                renderApproachingTasks();
+            });
+
             setDefaultDate();
             renderTasks();
             renderCalendar();
             showTasksForDay(new Date());
+            renderApproachingTasks();
 
             flatpickr(dueDateInput, {
                 dateFormat: "Y-m-d",
