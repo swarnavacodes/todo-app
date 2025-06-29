@@ -163,8 +163,6 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 350px;
-            overflow-y: auto;
         }
 
         li {
@@ -1044,6 +1042,10 @@
                         <span class="stat-number" id="tasks-pending-count">0</span>
                         <span class="stat-label">Pending</span>
                     </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="tasks-approaching-count">0</span>
+                        <span class="stat-label">Approaching</span>
+                    </div>
                 </div>
             </div>
             <div class="container approaching-tasks-container">
@@ -1096,6 +1098,7 @@
             const showMoreApproachingTasksBtn = document.getElementById('show-more-approaching-tasks');
             const tasksDoneCount = document.getElementById('tasks-done-count');
             const tasksPendingCount = document.getElementById('tasks-pending-count');
+            const tasksApproachingCount = document.getElementById('tasks-approaching-count');
 
             let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
             let currentFilter = 'all';
@@ -1459,8 +1462,20 @@
             const updateTaskSummary = () => {
                 const doneTasks = tasks.filter(task => task.completed).length;
                 const pendingTasks = tasks.filter(task => !task.completed).length;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const approachingTasks = tasks.filter(task => {
+                    if (task.completed || !task.dueDate) return false;
+                    const dueDate = new Date(task.dueDate);
+                    dueDate.setHours(0, 0, 0, 0);
+                    const diffTime = dueDate.getTime() - today.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 3;
+                }).length;
+
                 tasksDoneCount.textContent = doneTasks;
                 tasksPendingCount.textContent = pendingTasks;
+                tasksApproachingCount.textContent = approachingTasks;
             };
 
             const setDefaultDate = () => {
