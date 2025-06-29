@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Master</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+        :root {
+            --primary-color: #5e72e4;
+            --secondary-color: #f4f7fc;
+            --font-color: #32325d;
+            --white-color: #ffffff;
+            --danger-color: #f5365c;
+            --success-color: #2dce89;
+            --warning-color: #fb6340;
+            --info-color: #11cdef;
+            --neutral-color: #8898aa;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 50px 20px;
+            color: var(--font-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            gap: 30px;
+            width: 100vw;
+            max-width: 1200px;
+            box-sizing: border-box;
+        }
+
+        .main-content, .calendar-container {
+            min-width: 0;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .container, .calendar-container, .tasks-for-day-container {
+            background: var(--white-color);
+            padding: 35px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .app-logo {
+            width: 45px;
+            height: 45px;
+            margin-right: 15px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            background: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        #todo-input, #due-date-input, #category-input, #priority-input {
+            flex-grow: 1;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            min-width: 160px;
+            max-width: 100%;
+            flex: 1 1 160px;
+        }
+
+        #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+
+        #add-button {
+            background-image: linear-gradient(to right, #6e8efb, #a777e3);
+            color: var(--white-color);
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            font-size: 22px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            flex: 0 0 auto;
+            min-width: 48px;
+            min-height: 48px;
+            margin-left: 0;
+        }
+
+        #add-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            background-color: var(--white-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        li:hover { 
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        li.completed .task-text {
+            text-decoration: line-through;
+            color: var(--neutral-color);
+        }
+
+        li.overdue .due-date {
+            color: var(--danger-color);
+            font-weight: 700;
+        }
+
+        .task-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+            min-width: 0;
+        }
+        .task-text-wrapper {
+            width: 100%;
+        }
+        .task-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--font-color);
+            cursor: pointer;
+        }
+        .task-edit-input {
+            display: none;
+            font-size: 16px;
+            font-weight: 500;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            width: 100%;
+            background: var(--white-color);
+            color: var(--font-color);
+            box-sizing: border-box;
+            outline: none;
+        }
+        li.editing-task .task-text {
+            display: none;
+        }
+        li.editing-task .task-edit-input {
+            display: block;
+        }
+        li.editing-task .task-meta-row,
+        li.editing-task .due-date {
+            display: none;
+        }
+        .task-meta-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tag-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .due-date {
+            font-size: 12px;
+            color: #8898aa;
+        }
+
+        /* Action buttons visibility */
+        .task-actions .save-btn,
+        .task-actions .cancel-btn {
+            display: none;
+        }
+        li.editing-task .task-actions .edit-btn,
+        li.editing-task .task-actions .complete-btn {
+            display: none;
+        }
+        li.editing-task .task-actions .save-btn,
+        li.editing-task .task-actions .cancel-btn {
+            display: flex;
+        }
+        .edit-btn, .save-btn, .cancel-btn {
+            background: #f7f7fa;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, filter 0.2s;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid transparent;
+        }
+        .save-btn {
+            color: var(--white-color);
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+        .cancel-btn {
+            color: var(--white-color);
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        .edit-btn {
+            color: var(--primary-color);
+            background: #f7f7fa;
+            border-color: #f7f7fa;
+        }
+        .edit-btn:hover, .save-btn:hover, .cancel-btn:hover {
+            box-shadow: var(--shadow-md);
+            filter: brightness(1.08);
+            background: var(--secondary-color);
+        }
+        .save-btn:hover { background: var(--success-color); filter: brightness(1.15); }
+        .cancel-btn:hover { background: var(--danger-color); filter: brightness(1.15); }
+        .edit-btn:hover { background: var(--primary-color); color: var(--white-color); }
+        .edit-actions button i, .edit-actions button svg {
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .filters {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 25px;
+        }
+
+        .filters button {
+            border: none;
+            color: var(--white-color);
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+
+        #filter-all { background-color: var(--info-color); }
+        #filter-active { background-color: var(--warning-color); }
+        #filter-completed { background-color: var(--success-color); }
+
+        .filters button.active {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
+        }
+
+        #clear-completed {
+            background-color: var(--danger-color);
+            color: var(--white-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #clear-completed:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
+        }
+
+        /* Calendar Styles */
+        .calendar-container { width: 380px; flex-shrink: 0; }
+        .calendar-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        #month-year { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); }
+        #prev-month, #next-month { 
+            background: var(--white-color); 
+            border: 2px solid var(--secondary-color); 
+            cursor: pointer; 
+            padding: 10px; 
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--font-color);
+            transition: all 0.3s;
+        }
+        #prev-month:hover, #next-month:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+            border-color: var(--primary-color);
+        }
+
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .calendar-day { text-align: center; padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center;}
+        .day-name { font-weight: 700; color: #aaa; font-size: 12px; }
+        .day-number {
+            cursor: pointer; transition: all 0.3s;
+            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin: auto;
+        }
+        .day-number:hover { background-color: var(--secondary-color); border-radius: 50%;}
+        .day-number.today { background-color: var(--primary-color); color: var(--white-color); font-weight: 700; border-radius: 50%; }
+        .day-number.has-task { position: relative; }
+        .day-number.has-task.all-complete::after { background-color: var(--success-color); }
+        .day-number.has-task::after {
+            content: ''; position: absolute; bottom: 4px; left: 50%;
+            transform: translateX(-50%); width: 6px; height: 6px;
+            background-color: var(--danger-color); border-radius: 50%;
+        }
+        .day-number.selected { background-color: var(--danger-color); color: var(--white-color); border-radius: 50%; }
+
+        /* Tasks for Day Styles */
+        .tasks-for-day-container { display: block; }
+        #tasks-for-day-list li {
+            display: flex;
+            align-items: center;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .status-dot.completed { background-color: var(--success-color); }
+        .status-dot.active { background-color: var(--warning-color); }
+
+        .show-more-btn {
+            background-color: var(--info-color);
+            color: var(--white-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            margin-top: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        .show-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
+        }
+
+        /* Custom Confirm Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            display: flex; justify-content: center;
+            align-items: center; z-index: 1000; opacity: 0;
+            transition: opacity 0.3s ease; pointer-events: none;
+        }
+        .modal-overlay.visible { opacity: 1; pointer-events: all; }
+        .modal-content {
+            background: var(--white-color); padding: 40px; border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg); text-align: center;
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-content p { margin: 0 0 25px; font-size: 18px; color: var(--font-color); }
+        .modal-actions { display: flex; justify-content: center; gap: 15px; }
+        .modal-actions button {
+            padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer;
+            font-weight: 500; transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+        #confirm-delete {
+            background-color: var(--danger-color); color: var(--white-color);
+        }
+        #confirm-delete:hover { background-color: #e02a4c; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        #cancel-delete {
+            background-color: var(--neutral-color); color: var(--white-color);
+        }
+        #cancel-delete:hover { background-color: #7a8999; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        /* Flatpickr Input Style - Match Text Box */
+        .flatpickr-input {
+            flex-grow: 1;
+            border: 2px solid transparent;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            color: var(--font-color);
+            transition: all 0.3s;
+            box-shadow: none;
+        }
+        .flatpickr-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+        /* Flatpickr Calendar Style - Match Theme */
+        .flatpickr-calendar {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            z-index: 9999 !important;
+        }
+        .flatpickr-day.selected, .flatpickr-day.today {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white-color);
+        }
+        .flatpickr-day:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        .flatpickr-months .flatpickr-month {
+            color: var(--primary-color);
+            fill: var(--primary-color);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: var(--font-color);
+        }
+        .flatpickr-current-month input.cur-year {
+            color: var(--font-color);
+        }
+        .flatpickr-weekdays {
+            background: var(--secondary-color);
+        }
+        span.flatpickr-weekday {
+            color: var(--font-color);
+        }
+        .flatpickr-time {
+            border-radius: var(--border-radius);
+            background: var(--secondary-color);
+        }
+        /* Ensure both text and date picker inputs have the same height and style */
+        .input-group input[type="text"],
+        .input-group .flatpickr-input,
+        .input-group input[type="date"],
+        .input-group .flatpickr-alt-input {
+            height: 48px !important;
+            min-height: 48px !important;
+            max-height: 48px !important;
+            line-height: 20px;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            color: var(--font-color);
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        .input-group .flatpickr-alt-input:focus,
+        .input-group .flatpickr-input:focus,
+        .input-group input[type="text"]:focus,
+        .input-group input[type="date"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+        /* Show primary color border on hover for both text and date picker */
+        .input-group input[type="text"]:hover,
+        .input-group .flatpickr-alt-input:hover {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.12);
+        }
+        /* Keep focus style stronger than hover */
+        .input-group input[type="text"]:focus,
+        .input-group .flatpickr-alt-input:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2) !important;
+        }
+        /* Flatpickr altInput - Ensure consistent styling with text input */
+        .input-group .flatpickr-alt-input {
+            flex-grow: 1;
+            border: 2px solid transparent;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            color: var(--font-color);
+            transition: all 0.3s;
+            box-shadow: none;
+            height: 48px;
+            line-height: 20px;
+        }
+        .input-group .flatpickr-alt-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+        /* Flatpickr Calendar - Match overall theme */
+        .flatpickr-calendar {
+            background: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .flatpickr-day {
+            border-radius: 8px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .flatpickr-day.selected, .flatpickr-day.today {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white-color);
+        }
+        .flatpickr-day:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        .flatpickr-months .flatpickr-month {
+            color: var(--primary-color);
+            fill: var(--primary-color);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: var(--font-color);
+        }
+        .flatpickr-current-month input.cur-year {
+            color: var(--font-color);
+        }
+        .flatpickr-weekdays {
+            background: var(--secondary-color);
+        }
+        span.flatpickr-weekday {
+            color: var(--font-color);
+        }
+        .flatpickr-time {
+            border-radius: var(--border-radius);
+            background: var(--secondary-color);
+        }
+        /* Ensure both text and date picker inputs have the same height and style */
+        .input-group input[type="text"],
+        .input-group .flatpickr-input,
+        .input-group input[type="date"],
+        .input-group .flatpickr-alt-input {
+            height: 48px !important;
+            min-height: 48px !important;
+            max-height: 48px !important;
+            line-height: 20px;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            color: var(--font-color);
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        .input-group .flatpickr-alt-input:focus,
+        .input-group .flatpickr-input:focus,
+        .input-group input[type="text"]:focus,
+        .input-group input[type="date"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+        /* Show primary color border on hover for both text and date picker */
+        .input-group input[type="text"]:hover,
+        .input-group .flatpickr-alt-input:hover {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.12);
+        }
+        /* Keep focus style stronger than hover */
+        .input-group input[type="text"]:focus,
+        .input-group .flatpickr-alt-input:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2) !important;
+        }
+        /* Flatpickr altInput - Ensure consistent styling with text input */
+        .input-group .flatpickr-alt-input {
+            flex-grow: 1;
+            border: 2px solid transparent;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            color: var(--font-color);
+            transition: all 0.3s;
+            box-shadow: none;
+            height: 48px;
+            line-height: 20px;
+        }
+        .input-group .flatpickr-alt-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 18px;
+            margin-top: 8px;
+        }
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            padding: 4px 8px;
+        }
+        .search-icon {
+            color: var(--neutral-color);
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        #search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 16px;
+            padding: 8px 0;
+            width: 180px;
+        }
+        #clear-search {
+            background: none;
+            border: none;
+            color: var(--neutral-color);
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 4px;
+            transition: color 0.2s;
+        }
+        #clear-search:hover { color: var(--danger-color); }
+        #category-filter, #priority-filter {
+            border-radius: 8px;
+            border: 2px solid var(--secondary-color);
+            padding: 8px 16px;
+            font-size: 15px;
+            background: var(--white-color);
+            color: var(--font-color);
+            transition: border 0.2s;
+        }
+        #category-filter:focus, #priority-filter:focus { border-color: var(--primary-color); }
+
+        /* Tag input and All Categories dropdown: match text box focus/hover/click */
+        #category-input, #category-filter {
+            border: 2px solid transparent;
+            background-color: var(--white-color);
+            color: var(--font-color);
+            border-radius: 8px;
+            transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+            outline: none;
+        }
+        #category-input:hover, #category-filter:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.12);
+            background: #f4f7fc;
+        }
+        #category-input:focus, #category-filter:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+            background: #f4f7fc;
+        }
+        #category-input:active, #category-filter:active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(94, 114, 228, 0.18);
+            background: #e9edfa;
+        }
+
+        /* Priority styles */
+        #priority-input, #priority-filter {
+            border-radius: 8px;
+            border: 2px solid transparent;
+            padding: 14px;
+            font-size: 16px;
+            background: var(--white-color);
+            color: var(--font-color);
+            transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+            outline: none;
+        }
+        #priority-input:hover, #priority-filter:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.12);
+            background: #f4f7fc;
+        }
+        #priority-input:focus, #priority-filter:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+            background: #f4f7fc;
+        }
+        #priority-input:active, #priority-filter:active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(94, 114, 228, 0.18);
+            background: #e9edfa;
+        }
+        .tag-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 2px 8px;
+            margin-right: 6px;
+            margin-bottom: 2px;
+            color: var(--primary-color);
+            background: #f4f7fc;
+            border: 1.5px solid var(--primary-color);
+            letter-spacing: 0.01em;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .tag-badge:last-child { margin-right: 0; }
+        .tag-badge.work { border-color: #5e72e4; color: #5e72e4; }
+        .tag-badge.personal { border-color: #fb6340; color: #fb6340; }
+        .tag-badge.shopping { border-color: #2dce89; color: #2dce89; }
+        .tag-badge.errands { border-color: #f5365c; color: #f5365c; }
+        .tag-badge.study { border-color: #11cdef; color: #11cdef; }
+        .tag-badge.fitness { border-color: #ffd200; color: #ffd200; }
+        .tag-badge:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        .priority-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 2px 10px;
+            margin-left: 8px;
+            color: #fff;
+            background: #b0b0b0;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.02em;
+        }
+        .priority-badge.low { background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); }
+        .priority-badge.medium { background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%); color: #32325d; }
+        .priority-badge.high { background: linear-gradient(90deg, #f857a6 0%, #ff5858 100%); }
+
+        /* Responsive Styles */
+        @media (max-width: 800px) {
+            .app-container { flex-direction: column; gap: 18px; }
+            .calendar-container { width: 100%; }
+            .main-content { gap: 18px; }
+            .container, .calendar-container, .tasks-for-day-container { padding: 18px; }
+            .search-filter-bar { flex-direction: column; gap: 8px; align-items: stretch; }
+        }
+
+        @media (max-width: 1200px) {
+            .app-container {
+                max-width: 100vw;
+                width: 100vw;
+            }
+        }
+
+        .task-actions {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            align-items: center;
+            margin-left: 0;
+            margin-top: 0;
+        }
+        .complete-btn, .delete-btn {
+            border: none;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            font-size: 18px;
+            margin: 0;
+        }
+        .task-actions button {
+            border: none !important;
+            margin: 0 !important;
+        }
+        /* For extra spacing from the right edge if needed */
+        li .task-actions { margin-left: auto; }
+
+        .complete-btn {
+            background: var(--success-color);
+            color: var(--white-color);
+            border: 2px solid var(--success-color);
+            font-weight: 700;
+        }
+        .complete-btn svg,
+        .delete-btn svg {
+            background: none;
+        }
+        .complete-btn svg path[fill="none"],
+        .delete-btn svg path[fill="none"] {
+            display: none;
+        }
+        .complete-btn svg,
+        .delete-btn svg {
+            fill: var(--white-color);
+            stroke: var(--white-color);
+            stroke-width: 2.5;
+            width: 22px;
+            height: 22px;
+        }
+        .complete-btn:hover {
+            background: #25b97a;
+            border-color: #25b97a;
+            box-shadow: var(--shadow-md);
+        }
+        .delete-btn {
+            background: var(--danger-color);
+            color: var(--white-color);
+            border: 2px solid var(--danger-color);
+            font-weight: 700;
+        }
+        .delete-btn svg {
+            fill: var(--white-color);
+            stroke: var(--white-color);
+            stroke-width: 2.5;
+            width: 22px;
+            height: 22px;
+        }
+        .delete-btn:hover {
+            background: #e02a4c;
+            border-color: #e02a4c;
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="main-content">
+            <div class="container">
+                <div class="app-header">
+                    <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#5e72e4"/></svg>
+                    <h1>Task Master</h1>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="todo-input" placeholder="Add a new task...">
+                    <input type="text" id="category-input" placeholder="Tags (comma separated or pick)" list="category-suggestions">
+                    <datalist id="category-suggestions">
+                        <option value="Work">
+                        <option value="Personal">
+                        <option value="Shopping">
+                        <option value="Errands">
+                        <option value="Study">
+                        <option value="Fitness">
+                    </datalist>
+                    <select id="priority-input">
+                        <option value="">Priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    <input type="date" id="due-date-input">
+                    <button id="add-button"><i class="fa fa-plus"></i></button>
+                </div>
+                <div class="search-filter-bar">
+                    <div class="search-container">
+                        <i class="fa fa-search search-icon"></i>
+                        <input type="text" id="search-input" placeholder="Search tasks or tags...">
+                        <button id="clear-search" title="Clear search"><i class="fa fa-times"></i></button>
+                    </div>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Errands">Errands</option>
+                        <option value="Study">Study</option>
+                        <option value="Fitness">Fitness</option>
+                    </select>
+                    <select id="priority-filter">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <ul id="todo-list"></ul>
+                <button id="show-more-all-tasks" class="show-more-btn">Show More</button>
+                <button id="clear-completed">Clear Completed</button>
+            </div>
+            </div>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                <h2 id="month-year"></h2>
+                <button id="next-month"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+            </div>
+            <div class="calendar-grid" id="calendar-days"></div>
+            <div class="tasks-for-day-container" id="tasks-for-day-container">
+                <h2 id="tasks-for-day-title"></h2>
+                <ul id="tasks-for-day-list"></ul>
+                <button id="show-more-tasks" class="show-more-btn">Show More</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-confirm" class="modal-overlay">
+        <div class="modal-content">
+            <p>Are you sure you want to delete this task?</p>
+            <div class="modal-actions">
+                <button id="confirm-delete">Yes, Delete</button>
+                <button id="cancel-delete">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const todoInput = document.getElementById('todo-input');
+            const dueDateInput = document.getElementById('due-date-input');
+            const addButton = document.getElementById('add-button');
+            const todoList = document.getElementById('todo-list');
+            const filterButtons = document.querySelectorAll('.filters button');
+            const clearCompleted = document.getElementById('clear-completed');
+            const categoryInput = document.getElementById('category-input');
+            const searchInput = document.getElementById('search-input');
+            const clearSearchBtn = document.getElementById('clear-search');
+            const categoryFilter = document.getElementById('category-filter');
+            const priorityFilter = document.getElementById('priority-filter');
+            const priorityInput = document.getElementById('priority-input');
+            const showMoreAllTasksBtn = document.getElementById('show-more-all-tasks');
+
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            let currentFilter = 'all';
+            let taskToDelete = null;
+            let selectedDate = new Date();
+            let searchQuery = '';
+            let filterCategory = '';
+            let priorityFilterValue = '';
+            let allTasksExpanded = false;
+
+            // Modal elements
+            const confirmModal = document.getElementById('custom-confirm');
+            const confirmDeleteBtn = document.getElementById('confirm-delete');
+            const cancelDeleteBtn = document.getElementById('cancel-delete');
+
+            // Calendar elements
+            const monthYearEl = document.getElementById('month-year');
+            const calendarDaysEl = document.getElementById('calendar-days');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            let currentDate = new Date();
+
+            // Tasks for day elements
+            const tasksForDayContainer = document.getElementById('tasks-for-day-container');
+            const tasksForDayTitle = document.getElementById('tasks-for-day-title');
+            const tasksForDayList = document.getElementById('tasks-for-day-list');
+            const showMoreTasksBtn = document.getElementById('show-more-tasks');
+
+            const saveTasks = () => {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderCalendar();
+                showTasksForDay(selectedDate);
+            };
+
+            // Update renderTasks to filter by priority
+            const renderTasks = () => {
+                todoList.innerHTML = '';
+                let filteredTasks = tasks.filter(task => {
+                    if (currentFilter === 'active') return !task.completed;
+                    if (currentFilter === 'completed') return task.completed;
+                    return true;
+                });
+                // Filter by search
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    filteredTasks = filteredTasks.filter(task =>
+                        task.text.toLowerCase().includes(q) ||
+                        (task.categories && task.categories.some(cat => cat.toLowerCase().includes(q)))
+                    );
+                }
+                // Filter by category
+                if (filterCategory) {
+                    filteredTasks = filteredTasks.filter(task =>
+                        task.categories && task.categories.includes(filterCategory)
+                    );
+                }
+                // Filter by priority
+                if (priorityFilterValue) {
+                    filteredTasks = filteredTasks.filter(task => (task.priority || '') === priorityFilterValue);
+                }
+                filteredTasks = filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+                const tasksToRender = allTasksExpanded ? filteredTasks : filteredTasks.slice(0, 3);
+
+                if (tasksToRender.length === 0) {
+                    todoList.innerHTML = '<li>No tasks found.</li>';
+                    showMoreAllTasksBtn.style.display = 'none';
+                    return;
+                }
+
+                tasksToRender.forEach(task => {
+                    const li = document.createElement('li');
+                    li.dataset.taskId = task.id;
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const dueDate = new Date(task.dueDate);
+                    dueDate.setHours(0, 0, 0, 0);
+
+                    let taskClass = task.completed ? 'completed' : '';
+                    if (!task.completed && dueDate < today) {
+                        taskClass += ' overdue';
+                    }
+                    if (task.editing) {
+                        taskClass += ' editing-task';
+                    }
+                    li.className = taskClass;
+
+                    li.innerHTML = `
+                        <div class="task-details">
+                            <div class="task-text-wrapper">
+                                <div class="task-text">${task.text}</div>
+                                <input class="task-edit-input" type="text" value="${task.text.replace(/\"/g, '&quot;')}">
+                            <style>
+                                .task-edit-input {
+                                    width: 200px;
+                                    max-width: 200px;
+                                    margin: 0 10px;
+                                    padding: 8px;
+                                    border: 2px solid var(--primary-color);
+                                    border-radius: 8px;
+                                    background: var(--white-color);
+                                }
+                                .task-edit-input:focus {
+                                    outline: none;
+                                    box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
+                                }
+                            </style>
+                            </div>
+                            <div class="task-meta-row">
+                                <div class="tag-badges">${(task.categories || []).map(cat => `<span class="tag-badge ${cat.toLowerCase()}">${cat}</span>`).join('')}</div>
+                                ${task.priority ? `<span class="priority-badge ${task.priority.toLowerCase()}">${task.priority}</span>` : ''}
+                            </div>
+                            ${task.dueDate ? `<div class="due-date">Due: ${new Date(task.dueDate).toLocaleDateString()}</div>` : ''}
+                        </div>
+                        <div class="task-actions">
+                            <button class="edit-btn" title="Edit"><i class="fa fa-pen"></i></button>
+                            <button class="save-btn" title="Save"><i class="fa fa-check"></i></button>
+                            <button class="cancel-btn" title="Cancel"><i class="fa fa-times"></i></button>
+                            <button class="complete-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></button>
+                            <button class="delete-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg></button>
+                        </div>
+                    `;
+
+                    const editInput = li.querySelector('.task-edit-input');
+                    const saveEdit = () => {
+                        const newValue = editInput.value.trim();
+                        if (newValue) {
+                            task.text = newValue;
+                            delete task.editing;
+                            saveTasks();
+                            renderTasks();
+                        }
+                    };
+
+                    li.querySelector('.edit-btn').addEventListener('click', () => {
+                        task.editing = true;
+                        renderTasks();
+                    });
+
+                    li.querySelector('.cancel-btn').addEventListener('click', () => {
+                        delete task.editing;
+                        renderTasks();
+                    });
+
+                    li.querySelector('.save-btn').addEventListener('click', saveEdit);
+                    editInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') saveEdit();
+                        if (e.key === 'Escape') {
+                            delete task.editing;
+                            renderTasks();
+                        }
+                    });
+
+                    li.querySelector('.complete-btn').addEventListener('click', () => {
+                        task.completed = !task.completed;
+                        saveTasks();
+                        renderTasks();
+                    });
+
+                    li.querySelector('.delete-btn').addEventListener('click', () => {
+                        taskToDelete = task.id;
+                        confirmModal.classList.add('visible');
+                    });
+
+                    todoList.appendChild(li);
+
+                    if (task.editing) {
+                        editInput.focus();
+                        editInput.select();
+                    }
+                });
+
+                if (filteredTasks.length > 3) {
+                    showMoreAllTasksBtn.style.display = 'block';
+                    showMoreAllTasksBtn.textContent = allTasksExpanded ? 'Show Less' : `Show ${filteredTasks.length - 3} More`;
+                } else {
+                    showMoreAllTasksBtn.style.display = 'none';
+                }
+            };
+
+            // Add priority to addTask
+            const addTask = () => {
+                const text = todoInput.value.trim();
+                const dueDateStr = dueDateInput.value;
+                let dueDate = '';
+                if (dueDateStr) {
+                    const [yyyy, mm, dd] = dueDateStr.split('-');
+                    dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+                }
+                // Parse categories
+                let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
+                // Get priority value safely
+                const priority = priorityInput ? priorityInput.value : '';
+                if (text) {
+                    tasks.push({ id: Date.now(), text, completed: false, dueDate: dueDate ? dueDate.toISOString() : '', categories, priority });
+                    todoInput.value = '';
+                    categoryInput.value = '';
+                    if (priorityInput) priorityInput.value = '';
+                    setDefaultDate();
+                    saveTasks();
+                    renderTasks();
+                    if (dueDate) {
+                        showTasksForDay(dueDate);
+                    }
+                }
+            };
+
+            const renderCalendar = () => {
+                calendarDaysEl.innerHTML = '';
+                const month = currentDate.getMonth();
+                const year = currentDate.getFullYear();
+                monthYearEl.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayNames.forEach(name => {
+                    const dayNameEl = document.createElement('div');
+                    dayNameEl.className = 'calendar-day day-name';
+                    dayNameEl.textContent = name;
+                    calendarDaysEl.appendChild(dayNameEl);
+                });
+
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day';
+                    calendarDaysEl.appendChild(emptyDay);
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'calendar-day day-number';
+                    dayEl.textContent = i;
+                    const today = new Date();
+                    const thisDate = new Date(year, month, i);
+
+                    if (thisDate.toDateString() === today.toDateString()) {
+                        dayEl.classList.add('today');
+                    }
+
+                    const tasksOnDay = tasks.filter(task => {
+                        if (!task.dueDate) return false;
+                        const taskDate = new Date(task.dueDate);
+                        // Use local date methods for comparison
+                        return taskDate.getFullYear() === thisDate.getFullYear() &&
+                            taskDate.getMonth() === thisDate.getMonth() &&
+                            taskDate.getDate() === thisDate.getDate();
+                    });
+
+                    if (tasksOnDay.length > 0) {
+                        dayEl.classList.add('has-task');
+                        if (tasksOnDay.every(t => t.completed)) {
+                            dayEl.classList.add('all-complete');
+                        }
+                    }
+
+                    dayEl.addEventListener('click', () => {
+                        document.querySelectorAll('.day-number.selected').forEach(d => d.classList.remove('selected'));
+                        dayEl.classList.add('selected');
+                        selectedDate = thisDate;
+                        showTasksForDay(thisDate);
+                    });
+
+                    calendarDaysEl.appendChild(dayEl);
+                }
+            };
+
+            const showTasksForDay = (date) => {
+                tasksForDayContainer.style.display = 'block';
+                tasksForDayTitle.textContent = `Tasks for ${date.toLocaleDateString()}`;
+
+                const tasksOnDay = tasks.filter(task => {
+                    if (!task.dueDate) return false;
+                    const taskDate = new Date(task.dueDate);
+                    return taskDate.getFullYear() === date.getFullYear() &&
+                           taskDate.getMonth() === date.getMonth() &&
+                           taskDate.getDate() === date.getDate();
+                }).sort((a, b) => b.id - a.id); // Sort by most recently added
+
+                let isExpanded = false;
+
+                const render = () => {
+                    const tasksToRender = isExpanded ? tasksOnDay : tasksOnDay.slice(0, 3);
+                    tasksForDayList.innerHTML = '';
+                    if (tasksToRender.length === 0) {
+                        tasksForDayList.innerHTML = '<li>No tasks due on this day.</li>';
+                        showMoreTasksBtn.style.display = 'none';
+                        return;
+                    }
+                    tasksToRender.forEach(task => {
+                        const li = document.createElement('li');
+                        const statusDot = document.createElement('div');
+                        statusDot.className = `status-dot ${task.completed ? 'completed' : 'active'}`;
+                        li.appendChild(statusDot);
+                        const taskText = document.createElement('span');
+                        taskText.textContent = task.text;
+                        li.appendChild(taskText);
+                        tasksForDayList.appendChild(li);
+                    });
+
+                    if (tasksOnDay.length > 3) {
+                        showMoreTasksBtn.style.display = 'block';
+                        showMoreTasksBtn.textContent = isExpanded ? 'Show Less' : `Show ${tasksOnDay.length - 3} More`;
+                    } else {
+                        showMoreTasksBtn.style.display = 'none';
+                    }
+                };
+
+                showMoreTasksBtn.onclick = () => {
+                    isExpanded = !isExpanded;
+                    render();
+                };
+
+                render();
+            };
+
+            const setDefaultDate = () => {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dueDateInput.value = `${yyyy}-${mm}-${dd}`;
+            };
+
+            addButton.addEventListener('click', addTask);
+            todoInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
+            categoryInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentFilter = button.id.replace('filter-', '');
+                    renderTasks();
+                });
+            });
+
+            clearCompleted.addEventListener('click', () => {
+                tasks = tasks.filter(task => !task.completed);
+                saveTasks();
+                renderTasks();
+            });
+
+            prevMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (taskToDelete !== null) {
+                    tasks = tasks.filter(t => t.id != taskToDelete);
+                    saveTasks();
+                    renderTasks();
+                    taskToDelete = null;
+                }
+                confirmModal.classList.remove('visible');
+            });
+
+            cancelDeleteBtn.addEventListener('click', () => {
+                taskToDelete = null;
+                confirmModal.classList.remove('visible');
+            });
+
+            searchInput.addEventListener('input', () => {
+                searchQuery = searchInput.value;
+                renderTasks();
+            });
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                renderTasks();
+            });
+            categoryFilter.addEventListener('change', () => {
+                filterCategory = categoryFilter.value;
+                renderTasks();
+            });
+            // Priority filter event
+            priorityFilter.addEventListener('change', () => {
+                priorityFilterValue = priorityFilter.value;
+                renderTasks();
+            });
+
+            showMoreAllTasksBtn.addEventListener('click', () => {
+                allTasksExpanded = !allTasksExpanded;
+                renderTasks();
+            });
+
+            setDefaultDate();
+            renderTasks();
+            renderCalendar();
+            showTasksForDay(new Date());
+
+            flatpickr(dueDateInput, {
+                dateFormat: "Y-m-d",
+                defaultDate: "today",
+                altInput: true,
+                altFormat: "F j, Y",
+            });
+        });
+    </script>
+
+</body>
+</html>
