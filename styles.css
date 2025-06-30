@@ -374,3 +374,11 @@ li.overdue .due-date {
     border-color: var(--neutral-color);
 }
 
+body, h1, h2, h3, h4, h5, h6, label, input, select, textarea, button, .task-text, .due-date, .stat-label, .stat-number, .tag-badge, .priority-badge, .search-icon, .edit-btn, .save-btn, .cancel-btn, .complete-btn, .delete-btn {
+    color: var(--font-color) !important;
+}
+
+body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4, body.dark-theme h5, body.dark-theme h6, body.dark-theme label, body.dark-theme input, body.dark-theme select, body.dark-theme textarea, body.dark-theme button, body.dark-theme .task-text, body.dark-theme .due-date, body.dark-theme .stat-label, body.dark-theme .stat-number, body.dark-theme .tag-badge, body.dark-theme .priority-badge, body.dark-theme .search-icon, body.dark-theme .edit-btn, body.dark-theme .save-btn, body.dark-theme .cancel-btn, body.dark-theme .complete-btn, body.dark-theme .delete-btn {
+    color: var(--font-color) !important;
+}
+
