@@ -1818,29 +1818,6 @@
                 altInput: true,
                 altFormat: "F j, Y",
             });
-
-            // Theme toggle logic
-            const applyTheme = () => {
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'dark') {
-                    document.body.classList.add('dark-theme');
-                    themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-                } else {
-                    document.body.classList.remove('dark-theme');
-                    themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-                }
-            };
-
-            themeToggleBtn.addEventListener('click', () => {
-                if (document.body.classList.contains('dark-theme')) {
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    localStorage.setItem('theme', 'dark');
-                }
-                applyTheme();
-            });
-
-            applyTheme(); // Apply theme on initial load
         });
 </script>
 <script src="main.js"></script>
