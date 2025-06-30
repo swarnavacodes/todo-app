@@ -358,7 +358,35 @@
             max-width: 200px;
         }
 
-        #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus {
+        #recurrence-input {
+            flex: 0 0 auto;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        #recurrence-end-input {
+            flex: 0 0 auto;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus, #recurrence-input:focus, #recurrence-end-input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
         }
@@ -1208,6 +1236,76 @@
             box-shadow: var(--shadow-md);
         }
     </style>
+    <style>
+        .repeat-on-label {
+            font-weight: 700;
+            margin-right: 10px;
+            color: var(--font-color);
+        }
+
+        #add-button {
+            padding: 10px 20px; /* Adjust padding for text */
+            font-size: 16px; /* Adjust font size for text */
+            min-width: auto; /* Remove fixed min-width */
+            min-height: auto; /* Remove fixed min-height */
+        }
+
+        #weekday-selector {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #weekday-selector label {
+            background-color: var(--white-color);
+            border: 2px solid var(--neutral-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--font-color);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        #weekday-selector input[type="checkbox"] {
+            display: none;
+        }
+
+        #weekday-selector input[type="checkbox"]:checked + label {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        #weekday-selector label:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme #weekday-selector label {
+            background-color: #5a5a5a;
+            border-color: #7a7a7a;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #weekday-selector input[type="checkbox"]:checked + label {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        body.dark-theme #weekday-selector label:hover {
+            border-color: var(--primary-color);
+            background-color: #6a6a6a;
+        }
+    </style>
+        </style>
 </head>
 <body onload="if(document.documentElement.classList.contains('dark-theme-preload')){document.body.classList.add('dark-theme');document.documentElement.classList.remove('dark-theme-preload');}">
 
@@ -1223,10 +1321,28 @@
                 </div>
                 <div class="input-group mandatory">
                     <input type="text" id="todo-input" placeholder="Add a task... (required)" required>
-                    <input type="date" id="due-date-input" placeholder="Due date (required)" required>
-                    <button id="add-button" type="button">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                    <select id="recurrence-input" required>
+                        <option value="none" selected>One Time</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                    <input type="text" id="due-date-input" placeholder="Start date (required)">
+                                        <div id="recurrence-end-date-container" style="display: none; align-items: center;">
+                        <label id="end-date-label" for="recurrence-end-input" style="margin-left: 8px; margin-right: 8px;">End date</label>
+                        <input type="text" id="recurrence-end-input" placeholder="End date for recurrence">
+                    </div>
+                    <div id="weekday-selector" style="display: none; margin-top: 10px;">
+                                                <label class="repeat-on-label">Repeat on:</label>
+                        <input type="checkbox" id="weekday-sun" value="0"><label for="weekday-sun">S</label>
+                        <input type="checkbox" id="weekday-mon" value="1"><label for="weekday-mon">M</label>
+                        <input type="checkbox" id="weekday-tue" value="2"><label for="weekday-tue">T</label>
+                        <input type="checkbox" id="weekday-wed" value="3"><label for="weekday-wed">W</label>
+                        <input type="checkbox" id="weekday-thu" value="4"><label for="weekday-thu">T</label>
+                        <input type="checkbox" id="weekday-fri" value="5"><label for="weekday-fri">F</label>
+                        <input type="checkbox" id="weekday-sat" value="6"><label for="weekday-sat">S</label>
+                    </div>
+                    <button id="add-button" type="button">Add Task(s)</button>
                 </div>
                 <div class="input-group optional">
                     <input type="text" id="category-input" placeholder="Tags (optional)" list="category-suggestions">
@@ -1320,6 +1436,7 @@
         </div>
     </div>
 
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const todoInput = document.getElementById('todo-input');
@@ -1334,6 +1451,10 @@
             const categoryFilter = document.getElementById('category-filter');
             const priorityFilter = document.getElementById('priority-filter');
             const priorityInput = document.getElementById('priority-input');
+            const recurrenceInput = document.getElementById('recurrence-input');
+            const recurrenceEndInput = document.getElementById('recurrence-end-input');
+            const recurrenceEndDateContainer = document.getElementById('recurrence-end-date-container');
+            const weekdaySelector = document.getElementById('weekday-selector');
             const showMoreAllTasksBtn = document.getElementById('show-more-all-tasks');
             const approachingTasksList = document.getElementById('approaching-tasks-list');
             const showMoreApproachingTasksBtn = document.getElementById('show-more-approaching-tasks');
@@ -1528,28 +1649,77 @@
             // Add priority to addTask
             const addTask = () => {
                 const text = todoInput.value.trim();
-                const dueDateStr = dueDateInput.value;
-                let dueDate = '';
-                if (dueDateStr) {
-                    const [yyyy, mm, dd] = dueDateStr.split('-');
-                    dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-                }
-                // Parse categories
+                let startDate = dueDateFlatpickr.selectedDates[0];
                 let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
-                // Get priority value safely
                 const priority = priorityInput ? priorityInput.value : '';
-                if (text) {
+                const recurrence = recurrenceInput ? recurrenceInput.value : 'none';
+                let endDate = recurrenceEndFlatpickr.selectedDates[0];
+
+                if (text && startDate) {
                     todoInput.classList.remove('input-error');
-                    tasks.push({ id: Date.now(), text, completed: false, dueDate: dueDate ? dueDate.toISOString() : '', categories, priority });
+
+                    if (recurrence === 'daily' && endDate) {
+                        let currentDate = new Date(startDate);
+                        while (currentDate <= endDate) {
+                            tasks.push({ 
+                                id: Date.now() + Math.random(), 
+                                text, 
+                                completed: false, 
+                                dueDate: new Date(currentDate).toISOString(), 
+                                categories, 
+                                priority, 
+                                recurrence, 
+                                recurrenceEndDate: endDate.toISOString() 
+                            });
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                    } else if (recurrence === 'weekly' && endDate) {
+                        const selectedDays = Array.from(document.querySelectorAll('#weekday-selector input[type=checkbox]:checked')).map(cb => parseInt(cb.value));
+                        if (selectedDays.length > 0) {
+                            let currentDate = new Date(startDate);
+                            while (currentDate <= endDate) {
+                                if (selectedDays.includes(currentDate.getDay())) {
+                                    tasks.push({ 
+                                        id: Date.now() + Math.random(), 
+                                        text, 
+                                        completed: false, 
+                                        dueDate: new Date(currentDate).toISOString(), 
+                                        categories, 
+                                        priority, 
+                                        recurrence, 
+                                        recurrenceEndDate: endDate.toISOString() 
+                                    });
+                                }
+                                currentDate.setDate(currentDate.getDate() + 1);
+                            }
+                        } else {
+                            // Handle case where no days are selected for weekly recurrence
+                            alert("Please select at least one day for weekly recurrence.");
+                        }
+                    } else {
+                        tasks.push({ 
+                            id: Date.now(), 
+                            text, 
+                            completed: false, 
+                            dueDate: startDate.toISOString(), 
+                            categories, 
+                            priority, 
+                            recurrence, 
+                            recurrenceEndDate: endDate ? endDate.toISOString() : '' 
+                        });
+                    }
+
                     todoInput.value = '';
                     categoryInput.value = '';
                     if (priorityInput) priorityInput.value = '';
+                    if (recurrenceInput) recurrenceInput.value = 'none';
+                    recurrenceEndFlatpickr.clear();
+                    dueDateFlatpickr.clear();
                     setDefaultDate();
                     saveTasks();
                     renderTasks();
-                    if (dueDate) {
-                        showTasksForDay(dueDate);
-                    }
+                    showTasksForDay(startDate);
+                    recurrenceEndDateContainer.style.display = 'none';
                 } else {
                     todoInput.classList.add('input-error');
                 }
@@ -1731,7 +1901,14 @@
                 dueDateInput.value = `${yyyy}-${mm}-${dd}`;
             };
 
-            addButton.addEventListener('click', addTask);
+            addButton.addEventListener('click', function() {
+                addTask();
+                if (recurrenceInput.value === 'none') {
+                    recurrenceEndDateContainer.style.display = 'none';
+                    recurrenceEndInput.required = false;
+                    recurrenceEndFlatpickr.clear();
+                }
+            });
             todoInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
             todoInput.addEventListener('input', () => todoInput.classList.remove('input-error'));
             categoryInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
@@ -1805,6 +1982,19 @@
                 renderApproachingTasks();
             });
 
+            recurrenceInput.addEventListener('change', function() {
+                if (this.value === 'weekly') {
+                    recurrenceEndDateContainer.style.display = 'flex';
+                    weekdaySelector.style.display = 'flex';
+                    recurrenceEndInput.required = true;
+                } else {
+                    recurrenceEndDateContainer.style.display = 'none';
+                    weekdaySelector.style.display = 'none';
+                    recurrenceEndInput.required = false;
+                    recurrenceEndFlatpickr.clear();
+                }
+            });
+
             setDefaultDate();
             renderTasks();
             renderCalendar();
@@ -1812,14 +2002,21 @@
             renderApproachingTasks();
             updateTaskSummary();
 
-            flatpickr(dueDateInput, {
+            const dueDateFlatpickr = flatpickr(dueDateInput, {
                 dateFormat: "Y-m-d",
                 defaultDate: "today",
+                altInput: true,
+                altFormat: "F j, Y",
+            });
+
+            const recurrenceEndFlatpickr = flatpickr(recurrenceEndInput, {
+                dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "F j, Y",
             });
         });
 </script>
 <script src="main.js"></script>
+
 </body>
 </html>

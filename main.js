@@ -18,14 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmDeleteBtn = document.getElementById('confirm-delete');
     const cancelDeleteBtn = document.getElementById('cancel-delete');
     const themeToggleBtn = document.getElementById('theme-toggle');
-
-    // ... (rest of your JS code from <script> block)
-
-    // For brevity, only the structure is shown here. The actual code will be copied in full.
-
-    // Example:
-    // addButton.addEventListener('click', addTask);
-    // ...
+    const recurrenceInput = document.getElementById('recurrence-input');
+    const recurrenceEndInput = document.getElementById('recurrence-end-input');
+    const endDateLabel = document.getElementById('end-date-label');
 
     // Theme toggle logic
     const applyTheme = () => {
@@ -55,4 +50,102 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     applyTheme(); // Apply theme on initial load
+
+    function addTask() {
+        const text = todoInput.value.trim();
+        const dueDateStr = dueDateInput.value;
+        let dueDate = '';
+        if (dueDateStr) {
+            const [yyyy, mm, dd] = dueDateStr.split('-');
+            dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+        }
+        let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
+        const priority = priorityInput ? priorityInput.value : '';
+        const recurrence = recurrenceInput ? recurrenceInput.value : 'none';
+        let recurrenceEndDate = '';
+        if (recurrenceEndInput && recurrenceEndInput.value) {
+            const [yyyy, mm, dd] = recurrenceEndInput.value.split('-');
+            recurrenceEndDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+        }
+        if (text && dueDate) {
+            if (recurrence !== 'none' && recurrenceEndDate) {
+                let current = new Date(dueDate);
+                while (current <= recurrenceEndDate) {
+                    tasks.push({
+                        id: Date.now() + Math.random(),
+                        text,
+                        completed: false,
+                        dueDate: new Date(current).toISOString(),
+                        categories,
+                        priority,
+                        recurrence,
+                        recurrenceEnd: recurrenceEndInput.value
+                    });
+                    if (recurrence === 'daily') current.setDate(current.getDate() + 1);
+                    if (recurrence === 'weekly') current.setDate(current.getDate() + 7);
+                    if (recurrence === 'monthly') current.setMonth(current.getMonth() + 1);
+                }
+            } else {
+                tasks.push({
+                    id: Date.now(),
+                    text,
+                    completed: false,
+                    dueDate: dueDate.toISOString(),
+                    categories,
+                    priority,
+                    recurrence: 'none',
+                    recurrenceEnd: ''
+                });
+            }
+            saveTasks();
+            renderTasks();
+            todoInput.value = '';
+            dueDateInput.value = '';
+            categoryInput.value = '';
+            priorityInput.value = '';
+            recurrenceInput.value = 'none';
+            recurrenceEndInput.value = '';
+            recurrenceEndInput.style.display = 'none';
+        } else {
+            todoInput.classList.add('input-error');
+        }
+    }
+
+    // Show/hide end date input and label based on recurrence selection, with null checks
+    recurrenceInput.addEventListener('change', function() {
+        if (recurrenceInput.value === 'none') {
+            if (recurrenceEndInput) {
+                recurrenceEndInput.style.display = 'none';
+                recurrenceEndInput.value = '';
+            }
+            if (endDateLabel) {
+                endDateLabel.style.display = 'none';
+            }
+        } else {
+            if (recurrenceEndInput) {
+                recurrenceEndInput.style.display = '';
+            }
+            if (endDateLabel) {
+                endDateLabel.style.display = '';
+            }
+        }
+    });
+
+    // Ensure correct initial state on page load, with null checks
+    if (recurrenceInput.value === 'none') {
+        if (recurrenceEndInput) {
+            recurrenceEndInput.style.display = 'none';
+            recurrenceEndInput.value = '';
+        }
+        if (endDateLabel) {
+            endDateLabel.style.display = 'none';
+        }
+    } else {
+        if (recurrenceEndInput) {
+            recurrenceEndInput.style.display = '';
+        }
+        if (endDateLabel) {
+            endDateLabel.style.display = '';
+        }
+    }
 });
