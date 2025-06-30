@@ -111,14 +111,27 @@
             border-radius: var(--border-radius);
             padding: 10px;
             display: flex;
-            gap: 8px;
-            margin-bottom: 25px;
+            gap: 15px;
+            margin-bottom: 15px;
             box-shadow: var(--shadow-sm);
             flex-wrap: wrap;
-            align-items: flex-start;
+            align-items: center;
         }
 
-        #todo-input, #due-date-input, #category-input, #priority-input {
+        .input-group.mandatory {
+            margin-bottom: 10px;
+        }
+
+        .input-group.optional {
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .input-group.optional:hover {
+            opacity: 1;
+        }
+
+        #todo-input, #due-date-input {
             flex-grow: 1;
             border: none;
             padding: 14px;
@@ -128,9 +141,26 @@
             background-color: var(--white-color);
             border: 2px solid transparent;
             transition: all 0.3s;
-            min-width: 160px;
-            max-width: 100%;
-            flex: 1 1 160px;
+            min-width: 200px;
+            max-width: calc(50% - 10px);
+        }
+
+        #todo-input {
+            min-width: 300px;
+        }
+
+        #category-input, #priority-input {
+            flex: 0 0 auto;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 8px;
+            background-color: var(--white-color);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            min-width: 150px;
+            max-width: 200px;
         }
 
         #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus {
@@ -985,9 +1015,15 @@
                     <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#5e72e4"/></svg>
                     <h1>Task Master</h1>
                 </div>
-                <div class="input-group">
-                    <input type="text" id="todo-input" placeholder="Add a new task...">
-                    <input type="text" id="category-input" placeholder="Tags (comma separated or pick)" list="category-suggestions">
+                <div class="input-group mandatory">
+                    <input type="text" id="todo-input" placeholder="Add a task... (required)" required>
+                    <input type="date" id="due-date-input" placeholder="Due date (required)" required>
+                    <button id="add-button" type="button">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="input-group optional">
+                    <input type="text" id="category-input" placeholder="Tags (optional)" list="category-suggestions">
                     <datalist id="category-suggestions">
                         <option value="Work">
                         <option value="Personal">
@@ -997,13 +1033,11 @@
                         <option value="Fitness">
                     </datalist>
                     <select id="priority-input">
-                        <option value="">Priority</option>
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
+                        <option value="">Priority (optional)...</option>
                         <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
                     </select>
-                    <input type="date" id="due-date-input">
-                    <button id="add-button"><i class="fa fa-plus"></i></button>
                 </div>
                 <div class="search-filter-bar">
                     <div class="search-container">
