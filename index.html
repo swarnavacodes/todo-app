@@ -83,6 +83,190 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 25px;
+            position: relative;
+        }
+
+        .theme-toggle-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--font-color);
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle-button:hover {
+            color: var(--primary-color);
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            --primary-color: #9d4edd;
+            --secondary-color: #2d2d2d;
+            --font-color: #e0e0e0;
+            --white-color: #3c3c3c;
+            --danger-color: #ff6b6b;
+            --success-color: #6bffa8;
+            --warning-color: #ffcc6b;
+            --info-color: #6bc4ff;
+            --neutral-color: #a0a0a0;
+            --shadow-sm: 0 1px 3px rgba(255,255,255,0.05);
+            --shadow-md: 0 4px 6px rgba(255,255,255,0.1);
+            --shadow-lg: 0 10px 15px rgba(255,255,255,0.15);
+        }
+
+        body.dark-theme .container, body.dark-theme .calendar-container, body.dark-theme .tasks-for-day-container {
+            background: var(--white-color);
+        }
+
+        body.dark-theme .input-group {
+            background: #4a4a4a;
+        }
+
+        body.dark-theme #todo-input, body.dark-theme #due-date-input, body.dark-theme #category-input, body.dark-theme #priority-input,
+        body.dark-theme .flatpickr-input, body.dark-theme .flatpickr-alt-input {
+            background-color: #5a5a5a;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #add-button {
+            background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+        }
+
+        body.dark-theme li {
+            background-color: var(--white-color);
+        }
+
+        body.dark-theme .edit-btn {
+            background: #4a4a4a;
+            color: var(--primary-color);
+        }
+
+        body.dark-theme .edit-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        body.dark-theme .filters button {
+            color: var(--font-color);
+        }
+
+        body.dark-theme #clear-completed {
+            background-color: var(--danger-color);
+        }
+
+        body.dark-theme #prev-month, body.dark-theme #next-month {
+            background: var(--white-color);
+            border-color: var(--neutral-color);
+            color: var(--font-color);
+        }
+
+        body.dark-theme #prev-month:hover, body.dark-theme #next-month:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+            border-color: var(--primary-color);
+        }
+
+        body.dark-theme .day-number:hover {
+            background-color: #5a5a5a;
+        }
+
+        body.dark-theme .day-number.today {
+            background-color: var(--primary-color);
+        }
+
+        body.dark-theme .day-number.selected {
+            background-color: var(--danger-color);
+        }
+
+        body.dark-theme .search-container {
+            background: #4a4a4a;
+        }
+
+        body.dark-theme #search-input {
+            background: transparent;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #category-filter, body.dark-theme #priority-filter {
+            background: var(--white-color);
+            color: var(--font-color);
+            border-color: var(--neutral-color);
+        }
+
+        body.dark-theme #category-input:hover, body.dark-theme #category-filter:hover,
+        body.dark-theme #priority-input:hover, body.dark-theme #priority-filter:hover {
+            background: #5a5a5a;
+        }
+
+        body.dark-theme #category-input:focus, body.dark-theme #category-filter:focus,
+        body.dark-theme #priority-input:focus, body.dark-theme #priority-filter:focus {
+            background: #5a5a5a;
+        }
+
+        body.dark-theme #category-input:active, body.dark-theme #category-filter:active,
+        body.dark-theme #priority-input:active, body.dark-theme #priority-filter:active {
+            background: #6a6a6a;
+        }
+
+        body.dark-theme .tag-badge {
+            background: #5a5a5a;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        body.dark-theme .tag-badge:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        body.dark-theme .priority-badge.medium {
+            color: var(--font-color);
+        }
+
+        body.dark-theme #approaching-tasks-list li {
+            background-color: #4a4a4a;
+        }
+
+        body.dark-theme .modal-content {
+            background: var(--white-color);
+        }
+
+        body.dark-theme .flatpickr-calendar {
+            background: var(--white-color);
+        }
+
+        body.dark-theme .flatpickr-day:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        body.dark-theme .flatpickr-months .flatpickr-month {
+            color: var(--primary-color);
+            fill: var(--primary-color);
+        }
+
+        body.dark-theme .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: var(--font-color);
+        }
+
+        body.dark-theme .flatpickr-current-month input.cur-year {
+            color: var(--font-color);
+        }
+
+        body.dark-theme .flatpickr-weekdays {
+            background: var(--secondary-color);
+        }
+
+        body.dark-theme span.flatpickr-weekday {
+            color: var(--font-color);
+        }
+
+        body.dark-theme .flatpickr-time {
+            background: var(--secondary-color);
         }
 
         .app-logo {
@@ -313,9 +497,9 @@
             border-color: var(--success-color);
         }
         .cancel-btn {
-            color: var(--white-color);
-            background: var(--danger-color);
-            border-color: var(--danger-color);
+            color: var(--font-color);
+            background: var(--secondary-color);
+            border-color: var(--neutral-color);
         }
         .edit-btn {
             color: var(--primary-color);
@@ -1022,6 +1206,9 @@
                 <div class="app-header">
                     <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#5e72e4"/></svg>
                     <h1>Task Master</h1>
+                    <button id="theme-toggle" class="theme-toggle-button">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
                 <div class="input-group mandatory">
                     <input type="text" id="todo-input" placeholder="Add a task... (required)" required>
@@ -1090,11 +1277,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container approaching-tasks-container">
-                <h2>Approaching Deadlines</h2>
-                <ul id="approaching-tasks-list"></ul>
-                <button id="show-more-approaching-tasks" class="show-more-btn">Show More</button>
-            </div>
+            
             </div>
         <div class="calendar-container">
             <div class="calendar-header">
@@ -1107,6 +1290,11 @@
                 <h2 id="tasks-for-day-title"></h2>
                 <ul id="tasks-for-day-list"></ul>
                 <button id="show-more-tasks" class="show-more-btn">Show More</button>
+            </div>
+            <div class="container approaching-tasks-container">
+                <h2>Approaching Deadlines</h2>
+                <ul id="approaching-tasks-list"></ul>
+                <button id="show-more-approaching-tasks" class="show-more-btn">Show More</button>
             </div>
         </div>
     </div>
@@ -1141,6 +1329,7 @@
             const tasksDoneCount = document.getElementById('tasks-done-count');
             const tasksPendingCount = document.getElementById('tasks-pending-count');
             const tasksApproachingCount = document.getElementById('tasks-approaching-count');
+            const themeToggleBtn = document.getElementById('theme-toggle');
 
             let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
             let currentFilter = 'all';
@@ -1262,7 +1451,7 @@
                         <div class="task-actions">
                             <button class="edit-btn" title="Edit"><i class="fa fa-pen"></i></button>
                             <button class="save-btn" title="Save"><i class="fa fa-check"></i></button>
-                            <button class="cancel-btn" title="Cancel"><i class="fa fa-times"></i></button>
+                            <button class="cancel-btn" title="Cancel"><i class="fa fa-undo"></i></button>
                             <button class="complete-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></button>
                             <button class="delete-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg></button>
                         </div>
@@ -1618,6 +1807,29 @@
                 altInput: true,
                 altFormat: "F j, Y",
             });
+
+            // Theme toggle logic
+            const applyTheme = () => {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    document.body.classList.remove('dark-theme');
+                    themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            };
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    localStorage.setItem('theme', 'dark');
+                }
+                applyTheme();
+            });
+
+            applyTheme(); // Apply theme on initial load
         });
     </script>
 
