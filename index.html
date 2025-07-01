@@ -1237,6 +1237,98 @@
             border-color: #e02a4c;
             box-shadow: var(--shadow-md);
         }
+
+        .repeat-on-label {
+            font-weight: 700;
+            margin-right: 10px;
+            color: var(--font-color);
+        }
+
+        #add-button {
+            padding: 10px 20px; /* Adjust padding for text */
+            font-size: 16px; /* Adjust font size for text */
+            min-width: auto; /* Remove fixed min-width */
+            min-height: auto; /* Remove fixed min-height */
+        }
+
+        #weekday-selector {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #weekday-selector label {
+            background-color: var(--white-color);
+            border: 2px solid var(--neutral-color);
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--font-color);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        #weekday-selector input[type="checkbox"] {
+            display: none;
+        }
+
+        #weekday-selector input[type="checkbox"]:checked + label {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        #weekday-selector label:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme #weekday-selector label {
+            background-color: #5a5a5a;
+            border-color: #7a7a7a;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #weekday-selector input[type="checkbox"]:checked + label {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        body.dark-theme #weekday-selector label:hover {
+            border-color: var(--primary-color);
+            background-color: #6a6a6a;
+        }
+
+        #calendar-clock {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            text-align: center;
+            line-height: 1.1;
+            text-shadow: none;
+        }
+
+        .calendar-clock-bg {
+            background: #f4f7fc;
+            border-radius: 18px;
+            padding: 10px 32px;
+            display: inline-block;
+            box-shadow: none;
+        }
+
+        @media (max-width: 600px) {
+            #calendar-clock { font-size: 1.3rem; }
+            .calendar-clock-bg { padding: 6px 12px; }
+        }
     </style>
     <style>
         .repeat-on-label {
@@ -1315,7 +1407,16 @@
         <div class="main-content">
             <div class="container">
                 <div class="app-header">
-                    <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#5e72e4"/></svg>
+                    <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6e8efb"/>
+      <stop offset="1" stop-color="#a777e3"/>
+    </linearGradient>
+  </defs>
+  <circle cx="24" cy="24" r="22" fill="url(#logo-gradient)" stroke="#fff" stroke-width="2.5"/>
+  <path d="M15.5 25.5l7 7 10-13" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                     <h1>Task Master</h1>
                     <button id="theme-toggle" class="theme-toggle-button">
                         <i class="fas fa-moon"></i>
@@ -1409,6 +1510,11 @@
             
             </div>
         <div class="calendar-container">
+            <div id="calendar-clock-bar" style="display: flex; justify-content: center; align-items: center; margin-bottom: 18px;">
+                <div class="calendar-clock-bg">
+                    <span id="calendar-clock" class="calendar-clock">12:32:17 AM</span>
+                </div>
+            </div>
             <div class="calendar-header">
                 <button id="prev-month"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                 <h2 id="month-year"></h2>
@@ -2020,6 +2126,24 @@
                 altInput: true,
                 altFormat: "F j, Y",
             });
+
+            // Calendar clock logic
+            const calendarClock = document.getElementById('calendar-clock');
+            function updateCalendarClock() {
+                const now = new Date();
+                let h = now.getHours();
+                let m = now.getMinutes();
+                let s = now.getSeconds();
+                let ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12;
+                h = h ? h : 12; // 0 should be 12
+                if (h < 10) h = '0' + h;
+                if (m < 10) m = '0' + m;
+                if (s < 10) s = '0' + s;
+                calendarClock.textContent = `${h}:${m}:${s} ${ampm}`;
+            }
+            setInterval(updateCalendarClock, 1000);
+            updateCalendarClock();
         });
 </script>
 <script src="main.js"></script>
