@@ -1989,6 +1989,10 @@
                     recurrenceEndDateContainer.style.display = 'flex';
                     weekdaySelector.style.display = 'flex';
                     recurrenceEndInput.required = true;
+                } else if (this.value === 'daily') {
+                    recurrenceEndDateContainer.style.display = 'flex';
+                    weekdaySelector.style.display = 'none';
+                    recurrenceEndInput.required = true;
                 } else {
                     recurrenceEndDateContainer.style.display = 'none';
                     weekdaySelector.style.display = 'none';
