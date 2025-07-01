@@ -314,7 +314,9 @@
         }
 
         .input-group.mandatory {
-            margin-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--secondary-color);
         }
 
         .input-group.optional {
@@ -1321,28 +1323,6 @@
                 </div>
                 <div class="input-group mandatory">
                     <input type="text" id="todo-input" placeholder="Add a task... (required)" required>
-                    <select id="recurrence-input" required>
-                        <option value="none" selected>One Time</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                    </select>
-                    <input type="text" id="due-date-input" placeholder="Start date (required)">
-                                        <div id="recurrence-end-date-container" style="display: none; align-items: center;">
-                        <label id="end-date-label" for="recurrence-end-input" style="margin-left: 8px; margin-right: 8px;">End date</label>
-                        <input type="text" id="recurrence-end-input" placeholder="End date for recurrence">
-                    </div>
-                    <div id="weekday-selector" style="display: none; margin-top: 10px;">
-                                                <label class="repeat-on-label">Repeat on:</label>
-                        <input type="checkbox" id="weekday-sun" value="0"><label for="weekday-sun">S</label>
-                        <input type="checkbox" id="weekday-mon" value="1"><label for="weekday-mon">M</label>
-                        <input type="checkbox" id="weekday-tue" value="2"><label for="weekday-tue">T</label>
-                        <input type="checkbox" id="weekday-wed" value="3"><label for="weekday-wed">W</label>
-                        <input type="checkbox" id="weekday-thu" value="4"><label for="weekday-thu">T</label>
-                        <input type="checkbox" id="weekday-fri" value="5"><label for="weekday-fri">F</label>
-                        <input type="checkbox" id="weekday-sat" value="6"><label for="weekday-sat">S</label>
-                    </div>
-                    <button id="add-button" type="button">Add Task(s)</button>
                 </div>
                 <div class="input-group optional">
                     <input type="text" id="category-input" placeholder="Tags (optional)" list="category-suggestions">
@@ -1360,6 +1340,28 @@
                         <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
                     </select>
+                    <select id="recurrence-input" required>
+                        <option value="none" selected>One Time</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                    <input type="text" id="due-date-input" placeholder="Start date (required)">
+                    <div id="recurrence-end-date-container" style="display: none; align-items: center;">
+                        <label id="end-date-label" for="recurrence-end-input" style="margin-left: 8px; margin-right: 8px;">End date</label>
+                        <input type="text" id="recurrence-end-input" placeholder="End date for recurrence">
+                    </div>
+                    <div id="weekday-selector" style="display: none; margin-top: 10px;">
+                        <label class="repeat-on-label">Repeat on:</label>
+                        <input type="checkbox" id="weekday-sun" value="0"><label for="weekday-sun">S</label>
+                        <input type="checkbox" id="weekday-mon" value="1"><label for="weekday-mon">M</label>
+                        <input type="checkbox" id="weekday-tue" value="2"><label for="weekday-tue">T</label>
+                        <input type="checkbox" id="weekday-wed" value="3"><label for="weekday-wed">W</label>
+                        <input type="checkbox" id="weekday-thu" value="4"><label for="weekday-thu">T</label>
+                        <input type="checkbox" id="weekday-fri" value="5"><label for="weekday-fri">F</label>
+                        <input type="checkbox" id="weekday-sat" value="6"><label for="weekday-sat">S</label>
+                    </div>
+                    <button id="add-button" type="button">Add Task(s)</button>
                 </div>
                 <div class="search-filter-bar">
                     <div class="search-container">
