@@ -231,7 +231,7 @@
 
         body.dark-theme .tag-badge:hover {
             background: var(--primary-color);
-            color: var(--white-color);
+            color: var,--white-color;
         }
 
         body.dark-theme .priority-badge.medium {
@@ -641,7 +641,7 @@
             width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin: auto;
         }
         .day-number:hover { background-color: var(--secondary-color); border-radius: 50%;}
-        .day-number.today { background-color: var(--primary-color); color: var(--white-color); font-weight: 700; border-radius: 50%; }
+        .day-number.today { background-color: var(--primary-color); color: var,--white-color; font-weight: 700; border-radius: 50%; }
         .day-number.has-task { position: relative; }
         .day-number.has-task.all-complete::after { background-color: var(--success-color); }
         .day-number.has-task::after {
@@ -1329,6 +1329,14 @@
             #calendar-clock { font-size: 1.3rem; }
             .calendar-clock-bg { padding: 6px 12px; }
         }
+
+        /* Ensure summary and approaching deadlines sections are always visible */
+.task-summary-container,
+.approaching-tasks-container {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
     </style>
     <style>
         .repeat-on-label {
@@ -1610,11 +1618,8 @@
             // Update renderTasks to filter by priority
             const renderTasks = () => {
                 todoList.innerHTML = '';
-                let filteredTasks = tasks.filter(task => {
-                    if (currentFilter === 'active') return !task.completed;
-                    if (currentFilter === 'completed') return task.completed;
-                    return true;
-                });
+                // Filter out null/invalid tasks
+                let filteredTasks = (tasks || []).filter(task => task && typeof task === 'object' && 'completed' in task && 'text' in task);
                 // Filter by search
                 if (searchQuery) {
                     const q = searchQuery.toLowerCase();
@@ -1916,6 +1921,7 @@
                         showMoreTasksBtn.style.display = 'none';
                         return;
                     }
+                   
                     tasksToRender.forEach(task => {
                         const li = document.createElement('li');
                         const statusDot = document.createElement('div');
@@ -2126,6 +2132,21 @@
                 altInput: true,
                 altFormat: "F j, Y",
             });
+
+            // Check for flatpickr before using it
+            if (typeof flatpickr !== 'function') {
+                alert('Error: flatpickr library is not loaded. Please ensure flatpickr.js is included before this script.');
+                // Optionally, disable date inputs to prevent further errors
+                if (dueDateInput) dueDateInput.disabled = true;
+                if (recurrenceEndInput) recurrenceEndInput.disabled = true;
+                // Still render static UI so user can see summary/approaching sections
+                renderTasks();
+                renderCalendar();
+                showTasksForDay(new Date());
+                renderApproachingTasks();
+                updateTaskSummary();
+                return;
+            }
 
             // Calendar clock logic
             const calendarClock = document.getElementById('calendar-clock');
