@@ -238,184 +238,8 @@
             color: var(--font-color);
         }
 
-        /* --- Modern Task Text Styles --- */
-.task-text {
-    font-size: 1.13rem;
-    font-weight: 600;
-    color: var(--font-color);
-    cursor: pointer;
-    transition: color 0.25s, text-shadow 0.25s, background 0.25s, box-shadow 0.25s;
-    text-shadow: 0 1.5px 6px rgba(94,114,228,0.08), 0 0.5px 0.5px rgba(50,50,93,0.08);
-    border-radius: 8px;
-    padding: 7px 14px;
-    background: linear-gradient(90deg,rgba(245,247,250,0.7) 0%,rgba(255,255,255,0.5) 100%);
-    box-shadow: 0 2px 8px 0 rgba(94,114,228,0.04);
-    display: inline-block;
-    letter-spacing: 0.01em;
-    margin-bottom: 2px;
-}
-.task-text:hover {
-    color: var(--primary-color);
-    background: linear-gradient(90deg,rgba(110,142,251,0.13) 0%,rgba(167,119,227,0.13) 100%);
-    box-shadow: 0 4px 16px 0 rgba(94,114,228,0.10);
-    text-shadow: 0 2px 8px rgba(94,114,228,0.13);
-}
-li.completed .task-text {
-    color: var(--neutral-color);
-    background: linear-gradient(90deg,rgba(200,200,200,0.13) 0%,rgba(220,220,220,0.13) 100%);
-    text-decoration: line-through;
-    opacity: 0.7;
-}
-li.overdue .task-text {
-    color: var(--danger-color);
-    background: linear-gradient(90deg,rgba(245,54,92,0.08) 0%,rgba(255,99,132,0.08) 100%);
-    font-weight: 700;
-    box-shadow: 0 2px 12px 0 rgba(245,54,92,0.08);
-}
-body.dark-theme .task-text {
-    background: linear-gradient(90deg,rgba(60,60,60,0.7) 0%,rgba(80,80,80,0.5) 100%);
-    color: var(--font-color);
-    text-shadow: 0 1.5px 6px rgba(157,78,221,0.10), 0 0.5px 0.5px rgba(224,224,224,0.08);
-}
-body.dark-theme .task-text:hover {
-    background: linear-gradient(90deg,rgba(157,78,221,0.13) 0%,rgba(110,142,251,0.13) 100%);
-    color: var(--primary-color);
-    box-shadow: 0 4px 16px 0 rgba(157,78,221,0.13);
-    text-shadow: 0 2px 8px rgba(157,78,221,0.13);
-}
-body.dark-theme li.completed .task-text {
-    color: var(--neutral-color);
-    background: linear-gradient(90deg,rgba(80,80,80,0.13) 0%,rgba(100,100,100,0.13) 100%);
-}
-body.dark-theme li.overdue .task-text {
-    color: var(--danger-color);
-    background: linear-gradient(90deg,rgba(255,107,107,0.10) 0%,rgba(245,54,92,0.10) 100%);
-    font-weight: 700;
-    box-shadow: 0 2px 12px 0 rgba(255,107,107,0.10);
-}
-
-/* Remove old task-text shadow overrides */
-body.dark-theme .task-text {
-    /* text-shadow now handled above for modern look */
-}
-body.dark-theme .task-text:hover {
-    /* text-shadow now handled above for modern look */
-}
-
-        body.dark-theme .container, body.dark-theme .calendar-container, body.dark-theme .tasks-for-day-container {
-            background: var(--white-color);
-        }
-
-        body.dark-theme .input-group {
-            background: #4a4a4a;
-        }
-
-        body.dark-theme #todo-input, body.dark-theme #due-date-input, body.dark-theme #category-input, body.dark-theme #priority-input,
-        body.dark-theme .flatpickr-input, body.dark-theme .flatpickr-alt-input {
-            background-color: #5a5a5a;
-            color: var(--font-color);
-        }
-
-        body.dark-theme #add-button {
-            background-image: linear-gradient(to right, #8e2de2, #4a00e0);
-        }
-
-        body.dark-theme li {
-            background-color: var(--white-color);
-        }
-
-        body.dark-theme .edit-btn {
-            background: #4a4a4a;
-            color: var(--primary-color);
-        }
-
-        body.dark-theme .edit-btn:hover {
-            background: var(--secondary-color);
-        }
-
-        body.dark-theme .filters button {
-            color: var(--font-color);
-        }
-
-        body.dark-theme #clear-completed {
-            background-color: var(--danger-color);
-        }
-
-        body.dark-theme #prev-month, body.dark-theme #next-month {
-            background: var(--white-color);
-            border-color: var(--neutral-color);
-            color: var(--font-color);
-        }
-
-        body.dark-theme #prev-month:hover, body.dark-theme #next-month:hover {
-            background: var(--primary-color);
-            color: var(--white-color);
-            border-color: var(--primary-color);
-        }
-
-        body.dark-theme .day-number:hover {
-            background-color: #5a5a5a;
-        }
-
-        body.dark-theme .day-number.today {
-            background-color: var(--primary-color);
-        }
-
-        body.dark-theme .day-number.selected {
-            background-color: var(--danger-color);
-        }
-
-        body.dark-theme .search-container {
-            background: #4a4a4a;
-        }
-
-        body.dark-theme #search-input {
-            background: transparent;
-            color: var(--font-color);
-        }
-
-        body.dark-theme #category-filter, body.dark-theme #priority-filter {
-            background: var(--white-color);
-            color: var(--font-color);
-            border-color: var(--neutral-color);
-        }
-
-        body.dark-theme #category-input:hover, body.dark-theme #category-filter:hover,
-        body.dark-theme #priority-input:hover, body.dark-theme #priority-filter:hover {
-            background: #5a5a5a;
-        }
-
-        body.dark-theme #category-input:focus, body.dark-theme #category-filter:focus,
-        body.dark-theme #priority-input:focus, body.dark-theme #priority-filter:focus {
-            background: #5a5a5a;
-        }
-
-        body.dark-theme #category-input:active, body.dark-theme #category-filter:active,
-        body.dark-theme #priority-input:active, body.dark-theme #priority-filter:active {
-            background: #6a6a6a;
-        }
-
-        body.dark-theme .tag-badge {
-            background: #5a5a5a;
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        body.dark-theme .tag-badge:hover {
-            background: var(--primary-color);
-            color: var(--white-color);
-        }
-
-        body.dark-theme .priority-badge.medium {
-            color: var(--font-color);
-        }
-
-        body.dark-theme .task-text {
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        body.dark-theme .task-text:hover {
-            color: var(--primary-color);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        body.dark-theme #approaching-tasks-list li {
+            background-color: #4a4a4a;
         }
 
         body.dark-theme .modal-content {
@@ -490,9 +314,7 @@ body.dark-theme .task-text:hover {
         }
 
         .input-group.mandatory {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--secondary-color);
+            margin-bottom: 10px;
         }
 
         .input-group.optional {
@@ -536,35 +358,7 @@ body.dark-theme .task-text:hover {
             max-width: 200px;
         }
 
-        #recurrence-input {
-            flex: 0 0 auto;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            outline: none;
-            border-radius: 8px;
-            background-color: var(--white-color);
-            border: 2px solid transparent;
-            transition: all 0.3s;
-            min-width: 150px;
-            max-width: 200px;
-        }
-
-        #recurrence-end-input {
-            flex: 0 0 auto;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            outline: none;
-            border-radius: 8px;
-            background-color: var(--white-color);
-            border: 2px solid transparent;
-            transition: all 0.3s;
-            min-width: 150px;
-            max-width: 200px;
-        }
-
-        #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus, #recurrence-input:focus, #recurrence-end-input:focus {
+        #todo-input:focus, #due-date-input:focus, #category-input:focus, #priority-input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.2);
         }
@@ -613,17 +407,13 @@ body.dark-theme .task-text:hover {
         }
 
         li.completed .task-text {
-            color: var(--neutral-color);
-            background: linear-gradient(90deg,rgba(200,200,200,0.13) 0%,rgba(220,220,220,0.13) 100%);
             text-decoration: line-through;
-            opacity: 0.7;
+            color: var(--neutral-color);
         }
 
-        li.overdue .task-text {
+        li.overdue .due-date {
             color: var(--danger-color);
-            background: linear-gradient(90deg,rgba(245,54,92,0.08) 0%,rgba(255,99,132,0.08) 100%);
             font-weight: 700;
-            box-shadow: 0 2px 12px 0 rgba(245,54,92,0.08);
         }
 
         .task-details {
@@ -639,25 +429,10 @@ body.dark-theme .task-text:hover {
             width: 100%;
         }
         .task-text {
-            font-size: 1.13rem;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 500;
             color: var(--font-color);
             cursor: pointer;
-            transition: color 0.25s, text-shadow 0.25s, background 0.25s, box-shadow 0.25s;
-            text-shadow: 0 1.5px 6px rgba(94,114,228,0.08), 0 0.5px 0.5px rgba(50,50,93,0.08);
-            border-radius: 8px;
-            padding: 7px 14px;
-            background: linear-gradient(90deg,rgba(245,247,250,0.7) 0%,rgba(255,255,255,0.5) 100%);
-            box-shadow: 0 2px 8px 0 rgba(94,114,228,0.04);
-            display: inline-block;
-            letter-spacing: 0.01em;
-            margin-bottom: 2px;
-        }
-        .task-text:hover {
-            color: var(--primary-color);
-            background: linear-gradient(90deg,rgba(110,142,251,0.13) 0%,rgba(167,119,227,0.13) 100%);
-            box-shadow: 0 4px 16px 0 rgba(94,114,228,0.10);
-            text-shadow: 0 2px 8px rgba(94,114,228,0.13);
         }
         .task-edit-input {
             display: none;
@@ -1432,169 +1207,7 @@ body.dark-theme .task-text:hover {
             border-color: #e02a4c;
             box-shadow: var(--shadow-md);
         }
-
-        .repeat-on-label {
-            font-weight: 700;
-            margin-right: 10px;
-            color: var(--font-color);
-        }
-
-        #add-button {
-            padding: 10px 20px; /* Adjust padding for text */
-            font-size: 16px; /* Adjust font size for text */
-            min-width: auto; /* Remove fixed min-width */
-            min-height: auto; /* Remove fixed min-height */
-        }
-
-        #weekday-selector {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #weekday-selector label {
-            background-color: var(--white-color);
-            border: 2px solid var(--neutral-color);
-            border-radius: 8px;
-            padding: 10px 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--font-color);
-            min-width: 30px;
-            text-align: center;
-        }
-
-        #weekday-selector input[type="checkbox"] {
-            display: none;
-        }
-
-        #weekday-selector input[type="checkbox"]:checked + label {
-            background-color: var(--primary-color);
-            color: var(--white-color);
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-md);
-        }
-
-        #weekday-selector label:hover {
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-sm);
-        }
-
-        body.dark-theme #weekday-selector label {
-            background-color: #5a5a5a;
-            border-color: #7a7a7a;
-            color: var(--font-color);
-        }
-
-        body.dark-theme #weekday-selector input[type="checkbox"]:checked + label {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--white-color);
-        }
-
-        body.dark-theme #weekday-selector label:hover {
-            border-color: var(--primary-color);
-            background-color: #6a6a6a;
-        }
-
-        #calendar-clock {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            letter-spacing: 1px;
-            font-family: 'Montserrat', Arial, sans-serif;
-            text-align: center;
-            line-height: 1.1;
-            text-shadow: none;
-        }
-
-        .calendar-clock-bg {
-            background: #f4f7fc;
-            border-radius: 18px;
-            padding: 10px 32px;
-            display: inline-block;
-            box-shadow: none;
-        }
-
-        @media (max-width: 600px) {
-            #calendar-clock { font-size: 1.3rem; }
-            .calendar-clock-bg { padding: 6px 12px; }
-        }
     </style>
-    <style>
-        .repeat-on-label {
-            font-weight: 700;
-            margin-right: 10px;
-            color: var(--font-color);
-        }
-
-        #add-button {
-            padding: 10px 20px; /* Adjust padding for text */
-            font-size: 16px; /* Adjust font size for text */
-            min-width: auto; /* Remove fixed min-width */
-            min-height: auto; /* Remove fixed min-height */
-        }
-
-        #weekday-selector {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #weekday-selector label {
-            background-color: var(--white-color);
-            border: 2px solid var(--neutral-color);
-            border-radius: 8px;
-            padding: 10px 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--font-color);
-            min-width: 30px;
-            text-align: center;
-        }
-
-        #weekday-selector input[type="checkbox"] {
-            display: none;
-        }
-
-        #weekday-selector input[type="checkbox"]:checked + label {
-            background-color: var(--primary-color);
-            color: var(--white-color);
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-md);
-        }
-
-        #weekday-selector label:hover {
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-sm);
-        }
-
-        body.dark-theme #weekday-selector label {
-            background-color: #5a5a5a;
-            border-color: #7a7a7a;
-            color: var(--font-color);
-        }
-
-        body.dark-theme #weekday-selector input[type="checkbox"]:checked + label {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--white-color);
-        }
-
-        body.dark-theme #weekday-selector label:hover {
-            border-color: var(--primary-color);
-            background-color: #6a6a6a;
-        }
-    </style>
-        </style>
 </head>
 <body onload="if(document.documentElement.classList.contains('dark-theme-preload')){document.body.classList.add('dark-theme');document.documentElement.classList.remove('dark-theme-preload');}">
 
@@ -1602,16 +1215,7 @@ body.dark-theme .task-text:hover {
         <div class="main-content">
             <div class="container">
                 <div class="app-header">
-                    <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <defs>
-    <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6e8efb"/>
-      <stop offset="1" stop-color="#a777e3"/>
-    </linearGradient>
-  </defs>
-  <circle cx="24" cy="24" r="22" fill="url(#logo-gradient)" stroke="#fff" stroke-width="2.5"/>
-  <path d="M15.5 25.5l7 7 10-13" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                    <svg class="app-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#5e72e4"/></svg>
                     <h1>Task Master</h1>
                     <button id="theme-toggle" class="theme-toggle-button">
                         <i class="fas fa-moon"></i>
@@ -1619,6 +1223,10 @@ body.dark-theme .task-text:hover {
                 </div>
                 <div class="input-group mandatory">
                     <input type="text" id="todo-input" placeholder="Add a task... (required)" required>
+                    <input type="date" id="due-date-input" placeholder="Due date (required)" required>
+                    <button id="add-button" type="button">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
                 <div class="input-group optional">
                     <input type="text" id="category-input" placeholder="Tags (optional)" list="category-suggestions">
@@ -1636,28 +1244,6 @@ body.dark-theme .task-text:hover {
                         <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
                     </select>
-                    <select id="recurrence-input" required>
-                        <option value="none" selected>One Time</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                    </select>
-                    <input type="text" id="due-date-input" placeholder="Start date (required)">
-                    <div id="recurrence-end-date-container" style="display: none; align-items: center;">
-                        <label id="end-date-label" for="recurrence-end-input" style="margin-left: 8px; margin-right: 8px;">End date</label>
-                        <input type="text" id="recurrence-end-input" placeholder="End date for recurrence">
-                    </div>
-                    <div id="weekday-selector" style="display: none; margin-top: 10px;">
-                        <label class="repeat-on-label">Repeat on:</label>
-                        <input type="checkbox" id="weekday-sun" value="0"><label for="weekday-sun">S</label>
-                        <input type="checkbox" id="weekday-mon" value="1"><label for="weekday-mon">M</label>
-                        <input type="checkbox" id="weekday-tue" value="2"><label for="weekday-tue">T</label>
-                        <input type="checkbox" id="weekday-wed" value="3"><label for="weekday-wed">W</label>
-                        <input type="checkbox" id="weekday-thu" value="4"><label for="weekday-thu">T</label>
-                        <input type="checkbox" id="weekday-fri" value="5"><label for="weekday-fri">F</label>
-                        <input type="checkbox" id="weekday-sat" value="6"><label for="weekday-sat">S</label>
-                    </div>
-                    <button id="add-button" type="button">Add Task(s)</button>
                 </div>
                 <div class="search-filter-bar">
                     <div class="search-container">
@@ -1705,11 +1291,6 @@ body.dark-theme .task-text:hover {
             
             </div>
         <div class="calendar-container">
-            <div id="calendar-clock-bar" style="display: flex; justify-content: center; align-items: center; margin-bottom: 18px;">
-                <div class="calendar-clock-bg">
-                    <span id="calendar-clock" class="calendar-clock">12:32:17 AM</span>
-                </div>
-            </div>
             <div class="calendar-header">
                 <button id="prev-month"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                 <h2 id="month-year"></h2>
@@ -1739,7 +1320,6 @@ body.dark-theme .task-text:hover {
         </div>
     </div>
 
-    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const todoInput = document.getElementById('todo-input');
@@ -1754,10 +1334,6 @@ body.dark-theme .task-text:hover {
             const categoryFilter = document.getElementById('category-filter');
             const priorityFilter = document.getElementById('priority-filter');
             const priorityInput = document.getElementById('priority-input');
-            const recurrenceInput = document.getElementById('recurrence-input');
-            const recurrenceEndInput = document.getElementById('recurrence-end-input');
-            const recurrenceEndDateContainer = document.getElementById('recurrence-end-date-container');
-            const weekdaySelector = document.getElementById('weekday-selector');
             const showMoreAllTasksBtn = document.getElementById('show-more-all-tasks');
             const approachingTasksList = document.getElementById('approaching-tasks-list');
             const showMoreApproachingTasksBtn = document.getElementById('show-more-approaching-tasks');
@@ -1828,7 +1404,7 @@ body.dark-theme .task-text:hover {
                 if (priorityFilterValue) {
                     filteredTasks = filteredTasks.filter(task => (task.priority || '') === priorityFilterValue);
                 }
-                filteredTasks = filteredTasks.sort((a, b) => a.completed - b.completed || new Date(a.dueDate) - new Date(b.dueDate));
+                filteredTasks = filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
                 const tasksToRender = allTasksExpanded ? filteredTasks : filteredTasks.slice(0, 3);
 
@@ -1952,77 +1528,28 @@ body.dark-theme .task-text:hover {
             // Add priority to addTask
             const addTask = () => {
                 const text = todoInput.value.trim();
-                let startDate = dueDateFlatpickr.selectedDates[0];
+                const dueDateStr = dueDateInput.value;
+                let dueDate = '';
+                if (dueDateStr) {
+                    const [yyyy, mm, dd] = dueDateStr.split('-');
+                    dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+                }
+                // Parse categories
                 let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
+                // Get priority value safely
                 const priority = priorityInput ? priorityInput.value : '';
-                const recurrence = recurrenceInput ? recurrenceInput.value : 'none';
-                let endDate = recurrenceEndFlatpickr.selectedDates[0];
-
-                if (text && startDate) {
+                if (text) {
                     todoInput.classList.remove('input-error');
-
-                    if (recurrence === 'daily' && endDate) {
-                        let currentDate = new Date(startDate);
-                        while (currentDate <= endDate) {
-                            tasks.push({ 
-                                id: Date.now() + Math.random(), 
-                                text, 
-                                completed: false, 
-                                dueDate: new Date(currentDate).toISOString(), 
-                                categories, 
-                                priority, 
-                                recurrence, 
-                                recurrenceEndDate: endDate.toISOString() 
-                            });
-                            currentDate.setDate(currentDate.getDate() + 1);
-                        }
-                    } else if (recurrence === 'weekly' && endDate) {
-                        const selectedDays = Array.from(document.querySelectorAll('#weekday-selector input[type=checkbox]:checked')).map(cb => parseInt(cb.value));
-                        if (selectedDays.length > 0) {
-                            let currentDate = new Date(startDate);
-                            while (currentDate <= endDate) {
-                                if (selectedDays.includes(currentDate.getDay())) {
-                                    tasks.push({ 
-                                        id: Date.now() + Math.random(), 
-                                        text, 
-                                        completed: false, 
-                                        dueDate: new Date(currentDate).toISOString(), 
-                                        categories, 
-                                        priority, 
-                                        recurrence, 
-                                        recurrenceEndDate: endDate.toISOString() 
-                                    });
-                                }
-                                currentDate.setDate(currentDate.getDate() + 1);
-                            }
-                        } else {
-                            // Handle case where no days are selected for weekly recurrence
-                            alert("Please select at least one day for weekly recurrence.");
-                        }
-                    } else {
-                        tasks.push({ 
-                            id: Date.now(), 
-                            text, 
-                            completed: false, 
-                            dueDate: startDate.toISOString(), 
-                            categories, 
-                            priority, 
-                            recurrence, 
-                            recurrenceEndDate: endDate ? endDate.toISOString() : '' 
-                        });
-                    }
-
+                    tasks.push({ id: Date.now(), text, completed: false, dueDate: dueDate ? dueDate.toISOString() : '', categories, priority });
                     todoInput.value = '';
                     categoryInput.value = '';
                     if (priorityInput) priorityInput.value = '';
-                    if (recurrenceInput) recurrenceInput.value = 'none';
-                    recurrenceEndFlatpickr.clear();
-                    dueDateFlatpickr.clear();
                     setDefaultDate();
                     saveTasks();
                     renderTasks();
-                    showTasksForDay(startDate);
-                    recurrenceEndDateContainer.style.display = 'none';
+                    if (dueDate) {
+                        showTasksForDay(dueDate);
+                    }
                 } else {
                     todoInput.classList.add('input-error');
                 }
@@ -2204,14 +1731,7 @@ body.dark-theme .task-text:hover {
                 dueDateInput.value = `${yyyy}-${mm}-${dd}`;
             };
 
-            addButton.addEventListener('click', function() {
-                addTask();
-                if (recurrenceInput.value === 'none') {
-                    recurrenceEndDateContainer.style.display = 'none';
-                    recurrenceEndInput.required = false;
-                    recurrenceEndFlatpickr.clear();
-                }
-            });
+            addButton.addEventListener('click', addTask);
             todoInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
             todoInput.addEventListener('input', () => todoInput.classList.remove('input-error'));
             categoryInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTask());
@@ -2285,23 +1805,6 @@ body.dark-theme .task-text:hover {
                 renderApproachingTasks();
             });
 
-            recurrenceInput.addEventListener('change', function() {
-                if (this.value === 'weekly') {
-                    recurrenceEndDateContainer.style.display = 'flex';
-                    weekdaySelector.style.display = 'flex';
-                    recurrenceEndInput.required = true;
-                } else if (this.value === 'daily') {
-                    recurrenceEndDateContainer.style.display = 'flex';
-                    weekdaySelector.style.display = 'none';
-                    recurrenceEndInput.required = true;
-                } else {
-                    recurrenceEndDateContainer.style.display = 'none';
-                    weekdaySelector.style.display = 'none';
-                    recurrenceEndInput.required = false;
-                    recurrenceEndFlatpickr.clear();
-                }
-            });
-
             setDefaultDate();
             renderTasks();
             renderCalendar();
@@ -2309,39 +1812,14 @@ body.dark-theme .task-text:hover {
             renderApproachingTasks();
             updateTaskSummary();
 
-            const dueDateFlatpickr = flatpickr(dueDateInput, {
+            flatpickr(dueDateInput, {
                 dateFormat: "Y-m-d",
                 defaultDate: "today",
                 altInput: true,
                 altFormat: "F j, Y",
             });
-
-            const recurrenceEndFlatpickr = flatpickr(recurrenceEndInput, {
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "F j, Y",
-            });
-
-            // Calendar clock logic
-            const calendarClock = document.getElementById('calendar-clock');
-            function updateCalendarClock() {
-                const now = new Date();
-                let h = now.getHours();
-                let m = now.getMinutes();
-                let s = now.getSeconds();
-                let ampm = h >= 12 ? 'PM' : 'AM';
-                h = h % 12;
-                h = h ? h : 12; // 0 should be 12
-                if (h < 10) h = '0' + h;
-                if (m < 10) m = '0' + m;
-                if (s < 10) s = '0' + s;
-                calendarClock.textContent = `${h}:${m}:${s} ${ampm}`;
-            }
-            setInterval(updateCalendarClock, 1000);
-            updateCalendarClock();
         });
 </script>
 <script src="main.js"></script>
-
 </body>
 </html>
