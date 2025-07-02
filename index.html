@@ -1633,7 +1633,7 @@
                 if (priorityFilterValue) {
                     filteredTasks = filteredTasks.filter(task => (task.priority || '') === priorityFilterValue);
                 }
-                filteredTasks = filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                filteredTasks = filteredTasks.sort((a, b) => a.completed - b.completed || new Date(a.dueDate) - new Date(b.dueDate));
 
                 const tasksToRender = allTasksExpanded ? filteredTasks : filteredTasks.slice(0, 3);
 

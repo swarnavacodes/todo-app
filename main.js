@@ -51,65 +51,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyTheme(); // Apply theme on initial load
 
-    function addTask() {
-        const text = todoInput.value.trim();
-        const dueDateStr = dueDateInput.value;
-        let dueDate = '';
-        if (dueDateStr) {
-            const [yyyy, mm, dd] = dueDateStr.split('-');
-            dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-        }
-        let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
-        const priority = priorityInput ? priorityInput.value : '';
-        const recurrence = recurrenceInput ? recurrenceInput.value : 'none';
-        let recurrenceEndDate = '';
-        if (recurrenceEndInput && recurrenceEndInput.value) {
-            const [yyyy, mm, dd] = recurrenceEndInput.value.split('-');
-            recurrenceEndDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
-        }
-        if (text && dueDate) {
-            if (recurrence !== 'none' && recurrenceEndDate) {
-                let current = new Date(dueDate);
-                while (current <= recurrenceEndDate) {
-                    tasks.push({
-                        id: Date.now() + Math.random(),
-                        text,
-                        completed: false,
-                        dueDate: new Date(current).toISOString(),
-                        categories,
-                        priority,
-                        recurrence,
-                        recurrenceEnd: recurrenceEndInput.value
-                    });
-                    if (recurrence === 'daily') current.setDate(current.getDate() + 1);
-                    if (recurrence === 'weekly') current.setDate(current.getDate() + 7);
-                    if (recurrence === 'monthly') current.setMonth(current.getMonth() + 1);
-                }
-            } else {
+    
+function sortAndRenderTasks() {
+    tasks.sort((a, b) => a.completed - b.completed);
+    renderTasks();
+}
+
+// Add Task function (wrap the logic in a function)
+function addTask() {
+    const text = todoInput.value.trim();
+    const dueDateStr = dueDateInput.value;
+    let dueDate = '';
+    if (dueDateStr) {
+        const [yyyy, mm, dd] = dueDateStr.split('-');
+        dueDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    }
+    let categories = categoryInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    const priority = priorityInput ? priorityInput.value : '';
+    const recurrence = recurrenceInput ? recurrenceInput.value : 'none';
+    let recurrenceEndDate = '';
+    if (recurrenceEndInput && recurrenceEndInput.value) {
+        const [yyyy, mm, dd] = recurrenceEndInput.value.split('-');
+        recurrenceEndDate = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    }
+    if (text && dueDate) {
+        if (recurrence !== 'none' && recurrenceEndDate) {
+            let current = new Date(dueDate);
+            while (current <= recurrenceEndDate) {
                 tasks.push({
-                    id: Date.now(),
+                    id: Date.now() + Math.random(),
                     text,
                     completed: false,
-                    dueDate: dueDate.toISOString(),
+                    dueDate: new Date(current).toISOString(),
                     categories,
                     priority,
-                    recurrence: 'none',
-                    recurrenceEnd: ''
+                    recurrence,
+                    recurrenceEnd: recurrenceEndInput.value
                 });
+                if (recurrence === 'daily') current.setDate(current.getDate() + 1);
+                if (recurrence === 'weekly') current.setDate(current.getDate() + 7);
+                if (recurrence === 'monthly') current.setMonth(current.getMonth() + 1);
             }
-            saveTasks();
-            renderTasks();
-            todoInput.value = '';
-            dueDateInput.value = '';
-            categoryInput.value = '';
-            priorityInput.value = '';
-            recurrenceInput.value = 'none';
-            recurrenceEndInput.value = '';
-            recurrenceEndInput.style.display = 'none';
         } else {
-            todoInput.classList.add('input-error');
+            tasks.push({
+                id: Date.now(),
+                text,
+                completed: false,
+                dueDate: dueDate.toISOString(),
+                categories,
+                priority,
+                recurrence: 'none',
+                recurrenceEnd: ''
+            });
         }
+        saveTasks();
+        sortAndRenderTasks();
+        todoInput.value = '';
+        dueDateInput.value = '';
+        categoryInput.value = '';
+        priorityInput.value = '';
+        recurrenceInput.value = 'none';
+        recurrenceEndInput.value = '';
+        recurrenceEndInput.style.display = 'none';
+    } else {
+        todoInput.classList.add('input-error');
     }
+}
 
     // Show/hide end date input and label based on recurrence selection, with null checks
     recurrenceInput.addEventListener('change', function() {
