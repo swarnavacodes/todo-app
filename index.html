@@ -238,8 +238,184 @@
             color: var(--font-color);
         }
 
-        body.dark-theme #approaching-tasks-list li {
-            background-color: #4a4a4a;
+        /* --- Modern Task Text Styles --- */
+.task-text {
+    font-size: 1.13rem;
+    font-weight: 600;
+    color: var(--font-color);
+    cursor: pointer;
+    transition: color 0.25s, text-shadow 0.25s, background 0.25s, box-shadow 0.25s;
+    text-shadow: 0 1.5px 6px rgba(94,114,228,0.08), 0 0.5px 0.5px rgba(50,50,93,0.08);
+    border-radius: 8px;
+    padding: 7px 14px;
+    background: linear-gradient(90deg,rgba(245,247,250,0.7) 0%,rgba(255,255,255,0.5) 100%);
+    box-shadow: 0 2px 8px 0 rgba(94,114,228,0.04);
+    display: inline-block;
+    letter-spacing: 0.01em;
+    margin-bottom: 2px;
+}
+.task-text:hover {
+    color: var(--primary-color);
+    background: linear-gradient(90deg,rgba(110,142,251,0.13) 0%,rgba(167,119,227,0.13) 100%);
+    box-shadow: 0 4px 16px 0 rgba(94,114,228,0.10);
+    text-shadow: 0 2px 8px rgba(94,114,228,0.13);
+}
+li.completed .task-text {
+    color: var(--neutral-color);
+    background: linear-gradient(90deg,rgba(200,200,200,0.13) 0%,rgba(220,220,220,0.13) 100%);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+li.overdue .task-text {
+    color: var(--danger-color);
+    background: linear-gradient(90deg,rgba(245,54,92,0.08) 0%,rgba(255,99,132,0.08) 100%);
+    font-weight: 700;
+    box-shadow: 0 2px 12px 0 rgba(245,54,92,0.08);
+}
+body.dark-theme .task-text {
+    background: linear-gradient(90deg,rgba(60,60,60,0.7) 0%,rgba(80,80,80,0.5) 100%);
+    color: var(--font-color);
+    text-shadow: 0 1.5px 6px rgba(157,78,221,0.10), 0 0.5px 0.5px rgba(224,224,224,0.08);
+}
+body.dark-theme .task-text:hover {
+    background: linear-gradient(90deg,rgba(157,78,221,0.13) 0%,rgba(110,142,251,0.13) 100%);
+    color: var(--primary-color);
+    box-shadow: 0 4px 16px 0 rgba(157,78,221,0.13);
+    text-shadow: 0 2px 8px rgba(157,78,221,0.13);
+}
+body.dark-theme li.completed .task-text {
+    color: var(--neutral-color);
+    background: linear-gradient(90deg,rgba(80,80,80,0.13) 0%,rgba(100,100,100,0.13) 100%);
+}
+body.dark-theme li.overdue .task-text {
+    color: var(--danger-color);
+    background: linear-gradient(90deg,rgba(255,107,107,0.10) 0%,rgba(245,54,92,0.10) 100%);
+    font-weight: 700;
+    box-shadow: 0 2px 12px 0 rgba(255,107,107,0.10);
+}
+
+/* Remove old task-text shadow overrides */
+body.dark-theme .task-text {
+    /* text-shadow now handled above for modern look */
+}
+body.dark-theme .task-text:hover {
+    /* text-shadow now handled above for modern look */
+}
+
+        body.dark-theme .container, body.dark-theme .calendar-container, body.dark-theme .tasks-for-day-container {
+            background: var(--white-color);
+        }
+
+        body.dark-theme .input-group {
+            background: #4a4a4a;
+        }
+
+        body.dark-theme #todo-input, body.dark-theme #due-date-input, body.dark-theme #category-input, body.dark-theme #priority-input,
+        body.dark-theme .flatpickr-input, body.dark-theme .flatpickr-alt-input {
+            background-color: #5a5a5a;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #add-button {
+            background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+        }
+
+        body.dark-theme li {
+            background-color: var(--white-color);
+        }
+
+        body.dark-theme .edit-btn {
+            background: #4a4a4a;
+            color: var(--primary-color);
+        }
+
+        body.dark-theme .edit-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        body.dark-theme .filters button {
+            color: var(--font-color);
+        }
+
+        body.dark-theme #clear-completed {
+            background-color: var(--danger-color);
+        }
+
+        body.dark-theme #prev-month, body.dark-theme #next-month {
+            background: var(--white-color);
+            border-color: var(--neutral-color);
+            color: var(--font-color);
+        }
+
+        body.dark-theme #prev-month:hover, body.dark-theme #next-month:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+            border-color: var(--primary-color);
+        }
+
+        body.dark-theme .day-number:hover {
+            background-color: #5a5a5a;
+        }
+
+        body.dark-theme .day-number.today {
+            background-color: var(--primary-color);
+        }
+
+        body.dark-theme .day-number.selected {
+            background-color: var(--danger-color);
+        }
+
+        body.dark-theme .search-container {
+            background: #4a4a4a;
+        }
+
+        body.dark-theme #search-input {
+            background: transparent;
+            color: var(--font-color);
+        }
+
+        body.dark-theme #category-filter, body.dark-theme #priority-filter {
+            background: var(--white-color);
+            color: var(--font-color);
+            border-color: var(--neutral-color);
+        }
+
+        body.dark-theme #category-input:hover, body.dark-theme #category-filter:hover,
+        body.dark-theme #priority-input:hover, body.dark-theme #priority-filter:hover {
+            background: #5a5a5a;
+        }
+
+        body.dark-theme #category-input:focus, body.dark-theme #category-filter:focus,
+        body.dark-theme #priority-input:focus, body.dark-theme #priority-filter:focus {
+            background: #5a5a5a;
+        }
+
+        body.dark-theme #category-input:active, body.dark-theme #category-filter:active,
+        body.dark-theme #priority-input:active, body.dark-theme #priority-filter:active {
+            background: #6a6a6a;
+        }
+
+        body.dark-theme .tag-badge {
+            background: #5a5a5a;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        body.dark-theme .tag-badge:hover {
+            background: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        body.dark-theme .priority-badge.medium {
+            color: var(--font-color);
+        }
+
+        body.dark-theme .task-text {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        body.dark-theme .task-text:hover {
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         body.dark-theme .modal-content {
@@ -437,13 +613,17 @@
         }
 
         li.completed .task-text {
-            text-decoration: line-through;
             color: var(--neutral-color);
+            background: linear-gradient(90deg,rgba(200,200,200,0.13) 0%,rgba(220,220,220,0.13) 100%);
+            text-decoration: line-through;
+            opacity: 0.7;
         }
 
-        li.overdue .due-date {
+        li.overdue .task-text {
             color: var(--danger-color);
+            background: linear-gradient(90deg,rgba(245,54,92,0.08) 0%,rgba(255,99,132,0.08) 100%);
             font-weight: 700;
+            box-shadow: 0 2px 12px 0 rgba(245,54,92,0.08);
         }
 
         .task-details {
@@ -459,10 +639,25 @@
             width: 100%;
         }
         .task-text {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 1.13rem;
+            font-weight: 600;
             color: var(--font-color);
             cursor: pointer;
+            transition: color 0.25s, text-shadow 0.25s, background 0.25s, box-shadow 0.25s;
+            text-shadow: 0 1.5px 6px rgba(94,114,228,0.08), 0 0.5px 0.5px rgba(50,50,93,0.08);
+            border-radius: 8px;
+            padding: 7px 14px;
+            background: linear-gradient(90deg,rgba(245,247,250,0.7) 0%,rgba(255,255,255,0.5) 100%);
+            box-shadow: 0 2px 8px 0 rgba(94,114,228,0.04);
+            display: inline-block;
+            letter-spacing: 0.01em;
+            margin-bottom: 2px;
+        }
+        .task-text:hover {
+            color: var(--primary-color);
+            background: linear-gradient(90deg,rgba(110,142,251,0.13) 0%,rgba(167,119,227,0.13) 100%);
+            box-shadow: 0 4px 16px 0 rgba(94,114,228,0.10);
+            text-shadow: 0 2px 8px rgba(94,114,228,0.13);
         }
         .task-edit-input {
             display: none;
