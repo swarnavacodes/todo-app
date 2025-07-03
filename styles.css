@@ -214,7 +214,7 @@ h2 {
     box-shadow: 0 0 0 2px rgba(245, 54, 92, 0.2) !important;
 }
 
-#todo-input, #due-date-input, #category-input, #priority-input {
+#todo-input, #due-date-input, #category-input, #priority-input, #recurrence-input {
     border: 1px solid var(--neutral-color);
     padding: 10px;
     border-radius: 8px;
