@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tasksPendingCount = document.getElementById('tasks-pending-count');
     const tasksApproachingCount = document.getElementById('tasks-approaching-count');
     const calendarClock = document.getElementById('calendar-clock');
+    const approachingTasksList = document.getElementById('approaching-tasks-list');
 
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     let currentFilter = 'all';
